@@ -232,7 +232,7 @@ function LastFM(options){
 		},
 
 		getTopTags: function(params, callbacks){
-			signedCall('album.getTopTags', params, callbacks);
+			call('album.getTopTags', params, callbacks);
 		},
 
 		removeTag : function(params, session, callbacks){

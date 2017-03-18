@@ -36,13 +36,13 @@
         lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
             success: function (data) {
                 try {
-                    var top_tags = JSON.parse(data);
-                    console.log(top_tags);
+                    var top_tag = data.toptags.tag[0].name;
+                    console.log(top_tag);                   
                 } catch (error) {
                     console.log(error.message);
                 }
             }, error: function (code, message) {
-                //bla bla error
+                console.log(code);
             }
         });
     }
