@@ -22,6 +22,9 @@
 
     // load user info
     var loved_albums;
+    var top_tag;
+    var genres = [];
+    //get top albums and use this data for genres afterwards
     lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
         success: function (data) {
             loved_albums = data.topalbums.album;
@@ -31,13 +34,42 @@
         }
     });
 
+    //get top tags
     for (var i = 0; i < loved_albums.length; i++) {
 //        console.log(loved_albums[i]['name']);
         lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
             success: function (data) {
                 try {
-                    var top_tag = data.toptags.tag[0].name;
-                    console.log(top_tag);                   
+                    tags = data.toptags.tag;
+                    //usually first tag is the release year so I'm adding this to pass through that
+                    //although in needs more work after I run some tests.
+                    for(var j = 0; j < tags.length; j++) {
+                        if (!isNaN(tags[j].name))
+                            continue;
+                        else {
+                            top_tag = tags[j].name;
+                            break;
+                        }
+
+                    }
+                    //after i get the top tags I will sort them out and make sure there are no duplicates
+                    //to give a sense of valuation
+
+//                    top_tag = data.toptags.tag[0].name;
+
+                    //incrase value if duplicate
+                    // this is a crappy way of doing things, but that's what i had at the moment
+                    //doesn't wokr
+                    //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
+                    if (top_tag.indexOf(genres["genre"]) == -1) {
+                        //if I can't find any values
+                        genres = {"genre": top_tag, "value": 1};
+                    } else {
+                        //find a way for the object not to create another entry when in this block
+                        genres.value = ++genres.value;
+                    }
+                    console.log(genres);
+
                 } catch (error) {
                     console.log(error.message);
                 }
