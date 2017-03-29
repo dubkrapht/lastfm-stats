@@ -23,7 +23,8 @@
     // load user info
     var loved_albums;
     var top_tag;
-    var genres = [];
+    var genres = {};
+    var container = [];
     //get top albums and use this data for genres afterwards
     lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
         success: function (data) {
@@ -61,14 +62,15 @@
                     // this is a crappy way of doing things, but that's what i had at the moment
                     //doesn't wokr
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
-                    if (top_tag.indexOf(genres["genre"]) == -1) {
+                    if (true) { //change this
                         //if I can't find any values
-                        genres = {"genre": top_tag, "value": 1};
+                        genres.genre = top_tag;
+                        genres.value = 1;
+                        container[i] = genres;
                     } else {
                         //find a way for the object not to create another entry when in this block
-                        genres.value = ++genres.value;
                     }
-                    console.log(genres);
+                    // console.log(genres);
 
                 } catch (error) {
                     console.log(error.message);
@@ -78,6 +80,8 @@
             }
         });
     }
+    // console.log(genres);
+    console.log(container);
 </script>
 </body>
 </html>
