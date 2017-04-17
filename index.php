@@ -23,8 +23,8 @@
     // load user info
     var loved_albums;
     var top_tag;
+    var tags;
     var genres = [];
-    var container = [];
     //get top albums and use this data for genres afterwards
     lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
         success: function (data) {
@@ -36,8 +36,7 @@
     });
 
     //get top tags
-    for (var i = 0; i < loved_albums.length; i++) {
-//        console.log(loved_albums[i]['name']);
+    for (var i = 0; i < loved_albums.length; i++) (function (i) {
         lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
             success: function (data) {
                 try {
@@ -78,7 +77,7 @@
                 console.log(code);
             }
         });
-    }
+    }(i));
      console.log(genres);
 //    console.log(container);
 </script>
