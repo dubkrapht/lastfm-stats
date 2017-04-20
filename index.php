@@ -25,6 +25,7 @@
     var top_tag;
     var tags;
     var genres = [];
+    var counter = 0;
     //get top albums and use this data for genres afterwards
     lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
         success: function (data) {
@@ -40,6 +41,7 @@
         lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
             success: function (data) {
                 try {
+                    counter++;
                     tags = data.toptags.tag;
                     //usually first tag is the release year so I'm adding this to pass through that
                     //although in needs more work after I run some tests.
@@ -63,13 +65,15 @@
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
                     if (true) { //change this
                         //if I can't find any values
-                        genres.push({"genre": top_tag, "value": 1});
+                        genres[counter] = top_tag;
                     } else {
                         //find a way for the object not to create another entry when in this block
 
                     }
 //                     console.log(genres);
-
+                if(counter == loved_albums.length -1) {
+                    ffinish();
+                }
                 } catch (error) {
                     console.log(error.message);
                 }
@@ -78,7 +82,11 @@
             }
         });
     }(i));
-     console.log(genres);
+    
+    function ffinish() {
+        console.log(genres.length);
+    }
+
 //    console.log(container);
 </script>
 </body>
