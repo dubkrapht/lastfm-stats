@@ -20,12 +20,13 @@
         cache: cache
     });
 
-    // load user info
     var loved_albums;
     var top_tag;
     var tags;
     var genres = [];
-    var counter = 0;
+    var ac_g = [];
+    var top_tag_index = 0;
+
     //get top albums and use this data for genres afterwards
     lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
         success: function (data) {
@@ -41,7 +42,6 @@
         lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
             success: function (data) {
                 try {
-                    counter++;
                     tags = data.toptags.tag;
                     //usually first tag is the release year so I'm adding this to pass through that
                     //although in needs more work after I run some tests.
@@ -52,28 +52,16 @@
                             top_tag = tags[j].name;
                             break;
                         }
-
                     }
-                    //after i get the top tags I will sort them out and make sure there are no duplicates
-                    //to give a sense of valuation
-
-//                    top_tag = data.toptags.tag[0].name;
-
-                    //incrase value if duplicate
-                    // this is a crappy way of doing things, but that's what i had at the moment
-                    //doesn't wokr
+                    //TODO: genres repetition values
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
-                    if (true) { //change this
-                        //if I can't find any values
-                        genres[counter] = top_tag;
-                    } else {
-                        //find a way for the object not to create another entry when in this block
-
+                    genres[top_tag_index] = top_tag;
+                    top_tag_index++
+                    //get the actual data
+                    if(top_tag_index == loved_albums.length) {
+                        console.log(genres);
+                        //define a function outside and use it to populate the chart
                     }
-//                     console.log(genres);
-                if(counter == loved_albums.length -1) {
-                    ffinish();
-                }
                 } catch (error) {
                     console.log(error.message);
                 }
@@ -82,12 +70,7 @@
             }
         });
     }(i));
-    
-    function ffinish() {
-        console.log(genres.length);
-    }
 
-//    console.log(container);
 </script>
 </body>
 </html>
