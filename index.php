@@ -6,13 +6,30 @@
     <script type="text/javascript" src="lastfm.api.md5.js"></script>
     <script type="text/javascript" src="lastfm.api.js"></script>
     <script type="text/javascript" src="lastfm.api.cache.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 </head>
 <body>
-<div id="info"></div>
+<div id="wrapper">
+    <div id="content">
+        <canvas id="tagsChart" width="400" height="400"></canvas>
+    </div>
+</div>
 <script>
     //cache
     var cache = new LastFMCache();
-
+    var ctx = document.getElementById("tagsChart");
+    var tagsChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Electronic", "Indie", "Post-Rock", "Ambient"],
+            datasets: [
+                {
+                    label: "Yoann303 dataset",
+                    data: [4, 1, 3, 20]
+                }
+            ]
+        }
+    })
     //create lastfm object
     var lastfm = new LastFM({
         apiKey: '76305a32595a40f5d298af26c890a9b9',
