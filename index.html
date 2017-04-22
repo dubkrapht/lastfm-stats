@@ -12,12 +12,20 @@
 <div id="wrapper">
     <div id="content" style="width: 400px">
         <canvas id="tagsChart" width="400" height="400"></canvas>
+        <canvas id="albumsChart" width="400" height="400"></canvas>
+        <canvas id="tracksChart" width="400" height="400"></canvas>
+        <canvas id="rankingsChart" width="400" height="400"></canvas>
     </div>
 </div>
 <script>
     //cache
     var cache = new LastFMCache();
-    var ctx = document.getElementById("tagsChart");
+    //create charts
+    var tagsChart = document.getElementById("tagsChart");
+    var albumsChart = document.getElementById("albumsChart");
+    var tracksChart = document.getElementById("tracksChart");
+    var rankingsChart = document.getElementById("rankingsChart");
+    
     function buildGenres(chart, labels) {
 	    var tagsChart = new Chart(ctx, {
 	        type: 'radar',
