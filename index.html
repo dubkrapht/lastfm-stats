@@ -27,7 +27,7 @@
     var rankingsChart = document.getElementById("rankingsChart");
 
 
-    function buildGenres(chart, labels) {
+    function buildGenres(chart, labels, data) {
 	    var tagsChart = new Chart(chart, {
 	        type: 'radar',
 	        data: {
@@ -35,7 +35,7 @@
 	            datasets: [
 	                {
 	                    label: "Yoann303 dataset",
-	                    data: [10,10,10]
+	                    data: data
 	                }
 	            ]
 	        }
@@ -52,7 +52,7 @@
     var top_tag;
     var tags;
     var genres = [];
-    var ac_g = [];
+    var values = [];
     var top_tag_index = 0;
 
     //get top albums and use this data for genres afterwards
@@ -83,11 +83,13 @@
                     }
                     //TODO: genres repetition values
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
+
                     genres[top_tag_index] = top_tag;
+                    values[top_tag_index] = 1;
                     top_tag_index++
                     //get the actual data
                     if(top_tag_index == loved_albums.length) {
-                        buildGenres(tagsChart, genres, 10);
+                        buildGenres(tagsChart, genres, values);
                         //define a function outside and use it to populate the chart
                     }
                 } catch (error) {
