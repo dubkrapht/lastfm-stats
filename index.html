@@ -84,8 +84,13 @@
                     //TODO: genres repetition values
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
 
-                    genres[top_tag_index] = top_tag;
-                    values[top_tag_index] = 1;
+                    if(genres.indexOf(top_tag) != -1) {
+                        var increment_index = genres.indexOf(top_tag);
+                        values[increment_index]++;
+                    } else {
+                        genres[top_tag_index] = top_tag;
+                        values[top_tag_index] = 1;
+                    }
                     top_tag_index++
                     //get the actual data
                     if(top_tag_index == loved_albums.length) {
