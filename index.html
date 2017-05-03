@@ -38,7 +38,17 @@
 	                    data: data
 	                }
 	            ]
-	        }
+	        },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 5,
+                        scaleSize: 2
+                    }
+                }
+            }
 	    });
     }
     //create lastfm object
