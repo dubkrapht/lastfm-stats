@@ -7,14 +7,28 @@
     <script type="text/javascript" src="lastfm.api.js"></script>
     <script type="text/javascript" src="lastfm.api.cache.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+    <style>
+        .canvas-container {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
 <div id="wrapper">
-    <div id="content" style="width: 400px">
-        <canvas id="tagsChart" width="400" height="400"></canvas>
-        <canvas id="albumsChart" width="400" height="400"></canvas>
-        <canvas id="tracksChart" width="400" height="400"></canvas>
-        <canvas id="rankingsChart" width="400" height="400"></canvas>
+    <div id="content">
+        <div class="canvas-container">
+            <canvas id="tagsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="albumsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="tracksChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="rankingsChart"></canvas>
+        </div>
     </div>
 </div>
 <script>
@@ -40,7 +54,7 @@
                             'rgba(33,33,33,1)'
                         ],
                         backgroundColor: [
-                            'rgba(33,33,33,1)'
+                            'rgba(33,33,33,0.7)'
                         ],
                         borderWidth: 1,
                         pointRadius: 0
