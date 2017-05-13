@@ -7,14 +7,28 @@
     <script type="text/javascript" src="lastfm.api.js"></script>
     <script type="text/javascript" src="lastfm.api.cache.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+    <style>
+        .canvas-container {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
 <div id="wrapper">
-    <div id="content" style="width: 400px">
-        <canvas id="tagsChart" width="400" height="400"></canvas>
-        <canvas id="albumsChart" width="400" height="400"></canvas>
-        <canvas id="tracksChart" width="400" height="400"></canvas>
-        <canvas id="rankingsChart" width="400" height="400"></canvas>
+    <div id="content">
+        <div class="canvas-container">
+            <canvas id="tagsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="albumsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="tracksChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="rankingsChart"></canvas>
+        </div>
     </div>
 </div>
 <script>
@@ -35,10 +49,29 @@
 	            datasets: [
 	                {
 	                    label: "Yoann303 dataset",
-	                    data: data
+	                    data: data,
+                        borderColor: [
+                            'rgba(33,33,33,1)'
+                        ],
+                        backgroundColor: [
+                            'rgba(33,33,33,0.7)'
+                        ],
+                        borderWidth: 1,
+                        pointRadius: 0
 	                }
 	            ]
-	        }
+	        },
+            options: {
+                scale: {
+                    ticks: {
+                        display: false,
+                        beginAtZero: true,
+                        min: 0,
+                        max: 5,
+                        stepSize: 5
+                    }
+                }
+            }
 	    });
     }
     //create lastfm object
@@ -84,8 +117,13 @@
                     //TODO: genres repetition values
                     //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
 
-                    genres[top_tag_index] = top_tag;
-                    values[top_tag_index] = 1;
+                    if(genres.indexOf(top_tag) != -1) {
+                        var increment_index = genres.indexOf(top_tag);
+                        values[increment_index]++;
+                    } else {
+                        genres[top_tag_index] = top_tag;
+                        values[top_tag_index] = 1;
+                    }
                     top_tag_index++
                     //get the actual data
                     if(top_tag_index == loved_albums.length) {
