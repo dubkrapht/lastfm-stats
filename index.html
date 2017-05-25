@@ -88,57 +88,75 @@
     var values = [];
     var top_tag_index = 0;
 
+    var limit = 5;
+
     //get top albums and use this data for genres afterwards
-    lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: 5}, {
-        success: function (data) {
-            loved_albums = data.topalbums.album;
-//        console.log(loved_albums);
-        }, error: function (code, message) {
-            //bla bla error
-        }
-    });
-
-    //get top tags
-    for (var i = 0; i < loved_albums.length; i++) (function (i) {
-        lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
+    document.addEventListener('DOMContentLoaded', function () {
+        lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: limit}, {
             success: function (data) {
-                try {
-                    tags = data.toptags.tag;
-                    //usually first tag is the release year so I'm adding this to pass through that
-                    //although in needs more work after I run some tests.
-                    for(var j = 0; j < tags.length; j++) {
-                        if (!isNaN(tags[j].name))
-                            continue;
-                        else {
-                            top_tag = tags[j].name;
-                            break;
-                        }
-                    }
-                    //TODO: genres repetition values
-                    //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
-
-                    if(genres.indexOf(top_tag) != -1) {
-                        var increment_index = genres.indexOf(top_tag);
-                        values[increment_index]++;
-                    } else {
-                        genres[top_tag_index] = top_tag;
-                        values[top_tag_index] = 1;
-                    }
-                    top_tag_index++
-                    //get the actual data
-                    if(top_tag_index == loved_albums.length) {
-                        buildGenres(tagsChart, genres, values);
-                        //define a function outside and use it to populate the chart
-                    }
-                } catch (error) {
-                    console.log(error.message);
-                }
+                loved_albums = data.topalbums.album;
             }, error: function (code, message) {
-                console.log(code);
+                console.log(message);
             }
         });
-    }(i));
+    });
+    
+    var checkLovedAlbums = setInterval(isLovedAlbums, 200);
 
+    function isLovedAlbums() {
+        if(loved_albums != undefined) {
+            clearInterval(checkLovedAlbums);
+            storeTopTags();
+        }
+    }
+
+    function storeTopTags() {
+        //get top tags
+        for (var i = 0; i < limit; i++) (function (i) {
+            lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
+                success: function (data) {
+                    try {
+                        tags = data.toptags.tag;
+                        //usually first tag is the release year so I'm adding this to pass through that
+                        //although in needs more work after I run some tests.
+                        for(var j = 0; j < tags.length; j++) {
+                            if (!isNaN(tags[j].name))
+                                continue;
+                            else {
+                                top_tag = tags[j].name;
+                                break;
+                            }
+                        }
+                        //TODO: genres repetition values
+                        //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
+                        if(genres.indexOf(top_tag) != -1) {
+                            var increment_index = genres.indexOf(top_tag);
+                            values[increment_index]++;
+                        } else {
+                            genres[top_tag_index] = top_tag;
+                            values[top_tag_index] = 1;
+                        }
+                        top_tag_index++
+                        //get the actual data
+                        if(top_tag_index == loved_albums.length) {
+                            genres = genres.filter(function(element) {
+                                return element !== undefined;
+                            });
+                            values = values.filter(function(element) {
+                                return element !== undefined;
+                            });
+                            buildGenres(tagsChart, genres, values);
+                            //define a function outside and use it to populate the chart
+                        }
+                    } catch (error) {
+                        console.log(error.message);
+                    }
+                }, error: function (code, message) {
+                    console.log(code);
+                }
+            });
+        }(i));
+    }
 </script>
 </body>
 </html>
