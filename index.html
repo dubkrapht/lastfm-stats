@@ -129,7 +129,6 @@
                         }
                         //TODO: genres repetition values
                         //add other validations like trimming to lowercase and some regex maybe? to match a certain numeber of matched cases.
-
                         if(genres.indexOf(top_tag) != -1) {
                             var increment_index = genres.indexOf(top_tag);
                             values[increment_index]++;
@@ -140,6 +139,12 @@
                         top_tag_index++
                         //get the actual data
                         if(top_tag_index == loved_albums.length) {
+                            genres = genres.filter(function(element) {
+                                return element !== undefined;
+                            });
+                            values = values.filter(function(element) {
+                                return element !== undefined;
+                            });
                             buildGenres(tagsChart, genres, values);
                             //define a function outside and use it to populate the chart
                         }
