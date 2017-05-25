@@ -91,17 +91,27 @@
     var limit = 5;
 
     //get top albums and use this data for genres afterwards
-    lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: limit}, {
-        success: function (data) {
-            loved_albums = data.topalbums.album;
-//        console.log(loved_albums);
-        }, error: function (code, message) {
-            //bla bla error
-        }
+    document.addEventListener('DOMContentLoaded', function () {
+        lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: limit}, {
+            success: function (data) {
+                loved_albums = data.topalbums.album;
+            }, error: function (code, message) {
+                console.log(message);
+            }
+        });
     });
-    storeTopTags();
-    //get top tags
-    var storeTopTags = function () {
+    
+    var checkLovedAlbums = setInterval(isLovedAlbums, 200);
+
+    function isLovedAlbums() {
+        if(loved_albums != undefined) {
+            clearInterval(checkLovedAlbums);
+            storeTopTags();
+        }
+    }
+
+    function storeTopTags() {
+        //get top tags
         for (var i = 0; i < limit; i++) (function (i) {
             lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
                 success: function (data) {
@@ -142,7 +152,6 @@
             });
         }(i));
     }
-
 </script>
 </body>
 </html>
