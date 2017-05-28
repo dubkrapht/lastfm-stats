@@ -8,27 +8,21 @@
     <script type="text/javascript" src="lastfm.api.cache.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
     <style>
-        .canvas-container {
-            width: 400px;
+        canvas {
+            width: 50%;
             height: 400px;
+            position: relative;
+            float: left;
         }
     </style>
 </head>
 <body>
 <div id="wrapper">
     <div id="content">
-        <div class="canvas-container">
-            <canvas id="tagsChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="albumsChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="tracksChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="rankingsChart"></canvas>
-        </div>
+        <canvas id="tagsChart"></canvas>
+        <canvas id="albumsChart"></canvas>
+        <canvas id="tracksChart"></canvas>
+        <canvas id="rankingsChart"></canvas>
     </div>
 </div>
 <script>
@@ -62,6 +56,7 @@
 	            ]
 	        },
             options: {
+                responsive: false,
                 scale: {
                     ticks: {
                         display: false,
