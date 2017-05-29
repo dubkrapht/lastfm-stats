@@ -3,17 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Last Fm Statistics</title>
-    <script type="text/javascript" src="lastfm.api.md5.js"></script>
-    <script type="text/javascript" src="lastfm.api.js"></script>
-    <script type="text/javascript" src="lastfm.api.cache.js"></script>
+    <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
+    <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
+    <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-    <style>
-        .canvas-container {
-            width: 50%;
-            height: 400px;
-            float: left;
-        }
-    </style>
+	<link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
 <div id="wrapper">
@@ -34,15 +28,13 @@
     </div>
 </div>
 <script>
-    //cache
-    var cache = new LastFMCache();
-    //create charts
+    //chart elements vars
     var tagsChart = document.getElementById("tagsChart");
     var albumsChart = document.getElementById("albumsChart");
     var tracksChart = document.getElementById("tracksChart");
     var rankingsChart = document.getElementById("rankingsChart");
 
-
+    // CHART FUNCTIONS
     function buildGenres(chart, labels, data) {
 	    var tagsChart = new Chart(chart, {
 	        type: 'radar',
@@ -77,6 +69,11 @@
             }
 	    });
     }
+
+    //LASTFM LIB FUNCTIONS
+    //cache
+    var cache = new LastFMCache();
+
     //create lastfm object
     var lastfm = new LastFM({
         apiKey: '76305a32595a40f5d298af26c890a9b9',
@@ -84,6 +81,7 @@
         cache: cache
     });
 
+    //GLOBAL VARS
     var loved_albums;
     var top_tag;
     var tags;
@@ -104,6 +102,7 @@
         });
     });
     
+    //resolve undefined behavor for loved_albums
     var checkLovedAlbums = setInterval(isLovedAlbums, 200);
 
     function isLovedAlbums() {
@@ -113,8 +112,8 @@
         }
     }
 
+    //get and store genres
     function storeTopTags() {
-        //get top tags
         for (var i = 0; i < limit; i++) (function (i) {
             lastfm.album.getTopTags({artist: loved_albums[i].artist.name, album: loved_albums[i]['name']}, {
                 success: function (data) {
@@ -142,6 +141,7 @@
                         top_tag_index++
                         //get the actual data
                         if(top_tag_index == loved_albums.length) {
+                        	//remove undefined elements
                             genres = genres.filter(function(element) {
                                 return element !== undefined;
                             });
