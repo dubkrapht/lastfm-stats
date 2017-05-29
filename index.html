@@ -8,10 +8,9 @@
     <script type="text/javascript" src="lastfm.api.cache.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
     <style>
-        canvas {
+        .canvas-container {
             width: 50%;
             height: 400px;
-            position: relative;
             float: left;
         }
     </style>
@@ -19,10 +18,19 @@
 <body>
 <div id="wrapper">
     <div id="content">
-        <canvas id="tagsChart"></canvas>
-        <canvas id="albumsChart"></canvas>
-        <canvas id="tracksChart"></canvas>
-        <canvas id="rankingsChart"></canvas>
+        <div class="canvas-container">
+            <canvas id="tagsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="albumsChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="tracksChart"></canvas>
+        </div>
+        <div class="canvas-container">
+            <canvas id="rankingsChart"></canvas>
+        </div>
+        
     </div>
 </div>
 <script>
