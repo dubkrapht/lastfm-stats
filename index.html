@@ -97,8 +97,13 @@
                 _.forEach(top_albums, (item) =>{
                     lastfm.album.getTopTags({artist: item.artist.name, album: item.name}, {
                         success: data => {
-                            let tag = data.toptags.tag[0].name; // get the first one as a test will filter later
-                            top_tags.push(tag);
+                            let tag = data.toptags.tag[0];
+                            if(tag !== undefined) {
+                                top_tags.push(tag.name);
+                            } else {
+                                top_tags.push('no data');
+                            }
+                            console.log(top_tags.length);
                             if(top_tags.length === limit) {
                                 buildGenres(tagsChart, top_tags);
                             }
