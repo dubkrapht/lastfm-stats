@@ -28,6 +28,19 @@
         
     </div>
 </div>
+<label for="username">Last FM Username</label>
+<input type="text" name="username" id="username">
+<label for="period">Period</label>
+<select name="period" id="period">
+    <option value="overall">Overall</option>
+    <option value="1month">30 Days</option>
+    <option value="3month">3 Months</option>
+    <option value="6month">6 MOnths</option>
+    <option value="12month">1 Year</option>
+</select>
+<label for="limit">Stats Limit (Defaults to 50)</label>
+<input type="text" id="limit">
+<button id="submit">Get Stats</button>
 <script>
     //chart elements vars
     var tagsChart = document.getElementById("tagsChart");
@@ -37,14 +50,14 @@
 
     // CHART FUNCTIONS
     function buildGenres(chart, labels, data) {
-	    var tagsChart = new Chart(chart, {
-	        type: 'radar',
-	        data: {
-	            labels: labels,
-	            datasets: [
-	                {
-	                    label: "Yoann303 dataset",
-	                    data: data,
+        var tagsChart = new Chart(chart, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Yoann303 dataset",
+                        data: data,
                         borderColor: [
                             'rgba(33,33,33,1)'
                         ],
@@ -53,9 +66,9 @@
                         ],
                         borderWidth: 1,
                         pointRadius: 0
-	                }
-	            ]
-	        },
+                    }
+                ]
+            },
             options: {
                 responsive: false,
                 scale: {
@@ -68,7 +81,7 @@
                     }
                 }
             }
-	    });
+        });
     }
 
     //LASTFM LIB FUNCTIONS
@@ -82,19 +95,17 @@
         cache: cache
     });
 
-    //GLOBAL VARS
-    let loved_albums = {
-        albums: [],
-        artists: []
-    }
-    let top_tags = [];
-    const limit = 5;
     //get top albums and use this data for genres afterwards
-    document.addEventListener('DOMContentLoaded', function () {
-        lastfm.user.getTopAlbums({user: 'yoann303', period: '7day', limit: limit}, {
+    function getTopTags(username, period, limit) {
+        let loved_albums = {
+            albums: [],
+            artists: []
+        }
+        let top_tags = [];
+        lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
             success: function (data) {
                 const top_albums = data.topalbums.album;
-                _.forEach(top_albums, (item) =>{
+                _.forEach(top_albums, (item) => {
                     lastfm.album.getTopTags({artist: item.artist.name, album: item.name}, {
                         success: data => {
                             let tag = data.toptags.tag[0];
@@ -103,21 +114,29 @@
                             } else {
                                 top_tags.push('no data');
                             }
-                            console.log(top_tags.length);
+                            console.log(top_tags);
                             if(top_tags.length === limit) {
+                                console.log(tagsChart);
                                 buildGenres(tagsChart, top_tags);
                             }
                         },
                         error: (code, message) => {
                             console.log(message);
                         }
-                        
                     });
                 });
             }, error: function (code, message) {
                 console.log(message);
             }
         });
+    }
+    
+    let submitButton = document.getElementById('submit');
+    submitButton.addEventListener('click', () => {
+        const username = document.getElementById('username').value;
+        const period = document.getElementById('period').value;
+        const limit = document.getElementById('limit').value;
+        getTopTags(username, period, limit);
     });
 </script>
 </body>
