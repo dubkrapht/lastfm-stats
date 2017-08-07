@@ -114,9 +114,7 @@
                             } else {
                                 top_tags.push('no data');
                             }
-                            console.log(top_tags);
-                            if(top_tags.length === limit) {
-                                console.log(tagsChart);
+                            if(top_tags.length == limit) {
                                 buildGenres(tagsChart, top_tags);
                             }
                         },
