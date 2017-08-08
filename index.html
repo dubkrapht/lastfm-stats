@@ -95,14 +95,11 @@
         cache: cache
     });
 
+    let iterator = 0;
+
     //get top albums and use this data for genres afterwards
     function getTopTags(username, period, limit) {
-        let loved_albums = {
-            albums: [],
-            artists: []
-        }
         let top_tags = [];
-        let tag_index = 0;
         lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
             success: function (data) {
                 const top_albums = data.topalbums.album;
@@ -113,22 +110,31 @@
                             _.remove(tags, tag => {
                                 return !isNaN(tag.name);
                             });
-                            let tag = tags[0].name; // get the first one because it's sorted by count number
-                            if(_.some(top_tags, {name: tag})) {
+                            let tag = tags[0] || ''; // get the first one because it's sorted by count number
+                            if(_.some(top_tags, {name: tag.name})) {
                                 let foundTag = _.find(top_tags, item => {
-                                    return item.name = tag;
+                                    return item.name = tag.name;
                                 });
-                                foundTag.count++;
+                                if(foundTag !== undefined) {
+                                    foundTag.count++;
+                                }
                             } else {
                                 top_tags.push({
-                                    name: tag,
+                                    name: tag.name,
                                     count: 1
                                 });
                             }
-                            if(top_tags.length == limit) {
-                                buildGenres(tagsChart, top_tags.map(item => {
-                                    return item.name;
-                                }));
+                            iterator++;
+                            if(iterator == limit) {
+                                let genres = [];
+                                let count = [];
+                                _.map(top_tags, item => {
+                                    if(item !== undefined) {
+                                        genres.push(item.name);
+                                        count.push(item.count);
+                                    }
+                                });
+                                buildGenres(tagsChart, genres, count);
                             }
                         },
                         error: (code, message) => {
