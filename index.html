@@ -115,7 +115,10 @@
                             });
                             let tag = tags[0].name; // get the first one because it's sorted by count number
                             if(_.some(top_tags, {name: tag})) {
-                                // increase its count here
+                                let foundTag = _.find(top_tags, item => {
+                                    return item.name = tag;
+                                });
+                                foundTag.count++;
                             } else {
                                 top_tags.push({
                                     name: tag,
