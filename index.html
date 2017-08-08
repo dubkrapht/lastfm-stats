@@ -113,18 +113,15 @@
                             _.remove(tags, tag => {
                                 return !isNaN(tag.name);
                             });
-                            // let tag = tags[0]; // get the first one because it's sorted by count number
-                            // if(_.indexOf(top_tags, tag) === -1) {
-                            //     tag_index++;
-                            //     if(tag !== undefined) {
-                            //         top_tags.push({
-                            //             name: tag.name,
-                            //             count: 1
-                            //         });
-                            //     }
-                            // } else {
-                            //     top_tags[index].count++;
-                            // }
+                            let tag = tags[0].name; // get the first one because it's sorted by count number
+                            if(_.some(top_tags, {name: tag})) {
+                                // increase its count here
+                            } else {
+                                top_tags.push({
+                                    name: tag,
+                                    count: 1
+                                });
+                            }
                             if(top_tags.length == limit) {
                                 buildGenres(tagsChart, top_tags.map(item => {
                                     return item.name;
