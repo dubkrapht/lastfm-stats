@@ -49,14 +49,14 @@
     var rankingsChart = document.getElementById("rankingsChart");
 
     // CHART FUNCTIONS
-    function buildGenres(chart, labels, data) {
+    function buildGenres(chart, labels, data, user) {
         var tagsChart = new Chart(chart, {
             type: 'radar',
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        label: "Yoann303 dataset",
+                        label: user+" dataset",
                         data: data,
                         borderColor: [
                             'rgba(33,33,33,1)'
@@ -84,14 +84,14 @@
         });
     }
 
-    function buildTopPlays(chart, labels, values) {
+    function buildTopPlays(chart, labels, values, user) {
         var albumsChart = new Chart(chart, {
             type: 'horizontalBar',
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        label: 'yoann303 dataset',
+                        label: user+' dataset',
                         data: values
                     }
                 ]
@@ -113,7 +113,7 @@
     let iterator = 0;
 
     //get top albums and use this data for genres afterwards
-    function getTopTags(username, period, limit) {
+    function getTopTags(username, period, limit, user) {
         let top_tags = [];
         let top_plays = [];
         let topData = [];
@@ -124,7 +124,7 @@
                     topData.push(item.name+" by "+item.artist.name);
                     top_plays.push(item.playcount);
                 });
-                buildTopPlays(albumsChart, topData, top_plays);
+                buildTopPlays(albumsChart, topData, top_plays, user);
                 _.forEach(top_albums, (item) => {
                     lastfm.album.getTopTags({artist: item.artist.name, album: item.name}, {
                         success: data => {
@@ -156,8 +156,7 @@
                                         count.push(item.count);
                                     }
                                 });
-                                console.log(top_tags);
-                                buildGenres(tagsChart, genres, count);
+                                buildGenres(tagsChart, genres, count, user);
                             }
                         },
                         error: (code, message) => {
@@ -179,7 +178,7 @@
         if(limit === '') {
             limit = 50;
         }
-        getTopTags(username, period, limit);
+        getTopTags(username, period, limit, username);
     });
 </script>
 </body>
