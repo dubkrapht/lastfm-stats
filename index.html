@@ -84,6 +84,21 @@
         });
     }
 
+    function buildTopPlays(chart, labels, values) {
+        var albumsChart = new Chart(chart, {
+            type: 'horizontalBar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'yoann303 dataset',
+                        data: values
+                    }
+                ]
+            }
+        });
+    }
+
     //LASTFM LIB FUNCTIONS
     //cache
     var cache = new LastFMCache();
@@ -100,9 +115,16 @@
     //get top albums and use this data for genres afterwards
     function getTopTags(username, period, limit) {
         let top_tags = [];
+        let top_plays = [];
+        let topData = [];
         lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
             success: function (data) {
                 const top_albums = data.topalbums.album;
+                _.map(top_albums, item => {
+                    topData.push(item.name+" by "+item.artist.name);
+                    top_plays.push(item.playcount);
+                });
+                buildTopPlays(albumsChart, topData, top_plays);
                 _.forEach(top_albums, (item) => {
                     lastfm.album.getTopTags({artist: item.artist.name, album: item.name}, {
                         success: data => {
