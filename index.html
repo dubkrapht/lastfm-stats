@@ -112,28 +112,29 @@
                             });
                             let tag = tags[0] || ''; // get the first one because it's sorted by count number
                             if(_.some(top_tags, {name: tag.name})) {
-                                let foundTag = _.find(top_tags, item => {
-                                    return item.name = tag.name;
+                                let dblIndex = _.findIndex(top_tags, item => {
+                                    return item.name == tag.name;
                                 });
-                                if(foundTag !== undefined) {
-                                    foundTag.count++;
-                                }
+                                top_tags[dblIndex].count++;
                             } else {
-                                top_tags.push({
-                                    name: tag.name,
-                                    count: 1
-                                });
+                                if(tag.name !== undefined) {
+                                    top_tags.push({
+                                        name: tag.name,
+                                        count: 1
+                                    });
+                                }
                             }
                             iterator++;
                             if(iterator == limit) {
                                 let genres = [];
                                 let count = [];
                                 _.map(top_tags, item => {
-                                    if(item !== undefined) {
+                                    if(typeof item !== 'undefined') {
                                         genres.push(item.name);
                                         count.push(item.count);
                                     }
                                 });
+                                console.log(top_tags);
                                 buildGenres(tagsChart, genres, count);
                             }
                         },
