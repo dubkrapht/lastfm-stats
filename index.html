@@ -99,6 +99,21 @@
         });
     }
 
+    function buildTopTracks(chart, labels, values, user) {
+        var tracksChart = new Chart(chart, {
+            type: 'horizontalBar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: user+ 'dataset',
+                        data: values,
+                    }
+                ]
+            }
+        })
+    }
+
     //LASTFM LIB FUNCTIONS
     //cache
     var cache = new LastFMCache();
@@ -113,10 +128,12 @@
     let iterator = 0;
 
     //get top albums and use this data for genres afterwards
-    function getTopTags(username, period, limit, user) {
+    function getData(username, period, limit, user) {
         let top_tags = [];
         let top_plays = [];
         let topData = [];
+        let top_tracks = [];
+        let top_trackPlays = [];
         lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
             success: function (data) {
                 const top_albums = data.topalbums.album;
@@ -168,6 +185,19 @@
                 console.log(message);
             }
         });
+        lastfm.user.getTopTracks({user: username, period: period, limit: limit}, {
+            success: function (data) {
+              const topTracks = data.toptracks.track;
+              _.map(topTracks, item => {
+                top_tracks.push(item.name + " by " + item.artist.name);
+                top_trackPlays.push(item.playcount);
+              });
+              buildTopTracks(tracksChart, top_tracks, top_trackPlays, user);
+            },
+            error: (code, message) => {
+                console.log(code, message);
+            }
+        });
     }
     
     let submitButton = document.getElementById('submit');
@@ -178,7 +208,7 @@
         if(limit === '') {
             limit = 50;
         }
-        getTopTags(username, period, limit, username);
+        getData(username, period, limit, username);
     });
 </script>
 </body>
