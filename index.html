@@ -145,12 +145,11 @@
                             });
                             iterator++;
                             if (iterator == limit) {
-                                console.log(topTags);
                                 topTags.forEach((item) => {
                                     topTagsCount[item] = (topTagsCount[item] || 0) + 1;
                                 });
                                 topTags = _.uniq(topTags);
-                                console.log(topTagsCount);
+                                topTagsCount = Object.keys(topTagsCount).sort(function(a,b){return topTagsCount[b]-topTagsCount[a]});
                             }
                         },
                         error: (code, message) => {
