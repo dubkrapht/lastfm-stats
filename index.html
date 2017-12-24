@@ -1,47 +1,48 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Last Fm Statistics</title>
-    <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
-    <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
-    <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
-	<link rel="stylesheet" href="./assets/css/style.css">
+  <meta charset="UTF-8">
+  <title>Last Fm Statistics</title>
+  <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
+  <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
+  <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
+
 <body>
-<div id="wrapper">
+  <div id="wrapper">
     <div id="content">
-        <div class="canvas-container">
-            <canvas id="tagsChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="albumsChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="tracksChart"></canvas>
-        </div>
-        <div class="canvas-container">
-            <canvas id="rankingsChart"></canvas>
-        </div>
-        
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
+      </div>
+      <div class="canvas-container">
+        <canvas id="albumsChart"></canvas>
+      </div>
+      <div class="canvas-container">
+        <canvas id="tracksChart"></canvas>
+      </div>
+      <div class="canvas-container">
+        <canvas id="rankingsChart"></canvas>
+      </div>
     </div>
-</div>
-<label for="username">Last FM Username</label>
-<input type="text" name="username" id="username">
-<label for="period">Period</label>
-<select name="period" id="period">
+  </div>
+  <label for="username">Last FM Username</label>
+  <input type="text" name="username" id="username">
+  <label for="period">Period</label>
+  <select name="period" id="period">
     <option value="overall">Overall</option>
     <option value="1month">30 Days</option>
     <option value="3month">3 Months</option>
     <option value="6month">6 MOnths</option>
     <option value="12month">1 Year</option>
-</select>
-<label for="limit">Stats Limit (Defaults to 50)</label>
-<input type="text" id="limit">
-<button id="submit">Get Stats</button>
-<script>
+  </select>
+  <label for="limit">Stats Limit (Defaults to 50)</label>
+  <input type="text" id="limit">
+  <button id="submit">Get Stats</button>
+  <script>
     //chart elements vars
     var tagsChart = document.getElementById("tagsChart");
     var albumsChart = document.getElementById("albumsChart");
@@ -50,53 +51,49 @@
 
     // CHART FUNCTIONS
     function buildGenres(chart, labels, data, user) {
-        var tagsChart = new Chart(chart, {
-            type: 'radar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: user+" dataset",
-                        data: data,
-                        borderColor: [
-                            'rgba(33,33,33,1)'
-                        ],
-                        backgroundColor: [
-                            'rgba(33,33,33,0.7)'
-                        ],
-                        borderWidth: 1,
-                        pointRadius: 0
-                    }
-                ]
-            },
-            options: {
-                responsive: false,
-                scale: {
-                    ticks: {
-                        display: false,
-                        beginAtZero: true,
-                        min: 0,
-                        max: 5,
-                        stepSize: 5
-                    }
-                }
+      var tagsChart = new Chart(chart, {
+        type: 'radar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: user + " dataset",
+            data: data,
+            borderColor: [
+              'rgba(33,33,33,1)'
+            ],
+            backgroundColor: [
+              'rgba(33,33,33,0.7)'
+            ],
+            borderWidth: 1,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: false,
+          scale: {
+            ticks: {
+              display: false,
+              beginAtZero: true,
+              min: 0,
+              max: 5,
+              stepSize: 5
             }
-        });
+          }
+        }
+      });
     }
 
     function buildTopPlays(chart, labels, values, user) {
-        var albumsChart = new Chart(chart, {
-            type: 'horizontalBar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: user+' dataset',
-                        data: values
-                    }
-                ]
-            }
-        });
+      var albumsChart = new Chart(chart, {
+        type: 'horizontalBar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: user + ' dataset',
+            data: values
+          }]
+        }
+      });
     }
 
     //LASTFM LIB FUNCTIONS
@@ -105,78 +102,87 @@
 
     //create lastfm object
     var lastfm = new LastFM({
-        apiKey: '76305a32595a40f5d298af26c890a9b9',
-        apiSecret: '629f12eb1d53f50c80d4688192db2d15',
-        cache: cache
+      apiKey: '76305a32595a40f5d298af26c890a9b9',
+      apiSecret: '629f12eb1d53f50c80d4688192db2d15',
+      cache: cache
     });
 
     let iterator = 0;
 
     //get top albums and use this data for genres afterwards
     function getTopTags(username, period, limit, user) {
-        let topTags = [];
-        let topPlays = [];
-        let topAlbums = [];
-        let topTagsCount = {};  
-        lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
-            success: function (data) {
-                const top_albums = data.topalbums.album;
-                _.map(top_albums, item => {
-                    topAlbums.push(item.name+" by "+item.artist.name);
-                    topPlays.push(item.playcount);
+      let topTags = [];
+      let topPlays = [];
+      let topAlbums = [];
+      let topTagsCount = {};
+      lastfm.user.getTopAlbums({
+        user: username,
+        period: period,
+        limit: limit
+      }, {
+        success: function (data) {
+          const top_albums = data.topalbums.album;
+          _.map(top_albums, item => {
+            topAlbums.push(item.name + " by " + item.artist.name);
+            topPlays.push(item.playcount);
+          });
+          buildTopPlays(albumsChart, topAlbums, topPlays, user);
+          _.forEach(top_albums, (album) => {
+            lastfm.album.getTopTags({
+              artist: album.artist.name,
+              album: album.name
+            }, {
+              success: data => {
+                const tags = data.toptags.tag.slice(0, 10).map(obj => obj.name).filter((tag) => {
+                  if (/^\d+$/.test(tag) // check for year tags, thank you estremadures
+                    ||
+                    tag.toLowerCase().indexOf('albums i') !== -1 ||
+                    tag.toLowerCase().indexOf('best of') !== -1 ||
+                    tag.toLowerCase().indexOf('favorite') !== -1 ||
+                    tag.toLowerCase().indexOf('favourite') !== -1 ||
+                    tag.split(' ').length > 3) {
+                    return false;
+                  }
+                  return true;
                 });
-                buildTopPlays(albumsChart, topAlbums, topPlays, user);
-                _.forEach(top_albums, (album) => {
-                    lastfm.album.getTopTags({artist: album.artist.name, album: album.name}, {
-                        success: data => {
-                            const tags = data.toptags.tag.slice(0, 10).map(obj => obj.name).filter((tag) => {
-                                if (/^\d+$/.test(tag) // check for year tags, thank you estremadures
-                            || tag.toLowerCase().indexOf('albums i') !== -1
-                            || tag.toLowerCase().indexOf('best of') !== -1
-                            || tag.toLowerCase().indexOf('favorite') !== -1
-                            || tag.toLowerCase().indexOf('favourite') !== -1
-                            || tag.split(' ').length > 3) {
-                                return false;
-                                }
-                                return true;
-                            });
-                            tags.forEach((tag) => {
-                                topTags.push(tag);
-                            });
-                            iterator++;
-                            if (iterator == limit) {
-                                topTags.forEach((item) => {
-                                    topTagsCount[item] = (topTagsCount[item] || 0) + 1;
-                                });
-                                topTags = _.uniq(topTags);
-                                topTagsCount = Object.keys(topTagsCount).sort(function(a,b){return topTagsCount[b]-topTagsCount[a]});
-                            }
-                        },
-                        error: (code, message) => {
-                            console.log(message);
-                        }
-                    });
+                tags.forEach((tag) => {
+                  topTags.push(tag);
                 });
-                topTags.forEach((item) => {
+                iterator++;
+                if (iterator == limit) {
+                  topTags.forEach((item) => {
                     topTagsCount[item] = (topTagsCount[item] || 0) + 1;
-                });
-                topTags = _.uniq(topTags);
-            }, error: function (code, message) {
+                  });
+                  topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), function (a) {
+                    return a[1]
+                  }).reverse());
+                  buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(
+                    topTagsCount).slice(0, limit), user);
+                }
+              },
+              error: (code, message) => {
                 console.log(message);
-            }
-        });
+              }
+            });
+          });
+        },
+        error: function (code, message) {
+          console.log(message);
+        }
+      });
     }
-    
+
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
-        const username = document.getElementById('username').value;
-        const period = document.getElementById('period').value;
-        let limit = document.getElementById('limit').value;
-        if(limit === '') {
-            limit = 50;
-        }
-        getTopTags(username, period, limit, username);
+      const username = document.getElementById('username').value;
+      const period = document.getElementById('period').value;
+      let limit = document.getElementById('limit').value;
+      if (limit === '') {
+        limit = 50;
+      }
+      getTopTags(username, period, limit, username);
     });
-</script>
+  </script>
 </body>
+
 </html>

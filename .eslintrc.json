@@ -1,0 +1,23 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+      // disable requiring trailing commas because it might be nice to revert to
+      // being JSON at some point, and I don't want to make big changes now.
+      "comma-dangle": 0,
+      "func-names": "off",
+      "no-underscore-dangle": "off",
+      "require-yield": "off",
+      "no-shadow": "off",
+      "indent": [2, 2, {
+        "SwitchCase": 1
+      }],
+      "no-param-reassign": "off",
+      "global-require": "off",
+      "import/no-dynamic-require": "off",
+      "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
+      "generator-star-spacing": "off",
+      "max-len": "off",
+      "no-restricted-syntax": "off",
+      "no-loop-func": "off"
+    }
+  }
