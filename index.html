@@ -114,49 +114,43 @@
 
     //get top albums and use this data for genres afterwards
     function getTopTags(username, period, limit, user) {
-        let top_tags = [];
-        let top_plays = [];
-        let topData = [];
+        let topTags = [];
+        let topPlays = [];
+        let topAlbums = [];
+        let topTagsCount = {};  
         lastfm.user.getTopAlbums({user: username, period: period, limit: limit}, {
             success: function (data) {
                 const top_albums = data.topalbums.album;
                 _.map(top_albums, item => {
-                    topData.push(item.name+" by "+item.artist.name);
-                    top_plays.push(item.playcount);
+                    topAlbums.push(item.name+" by "+item.artist.name);
+                    topPlays.push(item.playcount);
                 });
-                buildTopPlays(albumsChart, topData, top_plays, user);
-                _.forEach(top_albums, (item) => {
-                    lastfm.album.getTopTags({artist: item.artist.name, album: item.name}, {
+                buildTopPlays(albumsChart, topAlbums, topPlays, user);
+                _.forEach(top_albums, (album) => {
+                    lastfm.album.getTopTags({artist: album.artist.name, album: album.name}, {
                         success: data => {
-                            let tags = data.toptags.tag;
-                            _.remove(tags, tag => {
-                                return !isNaN(tag.name);
-                            });
-                            let tag = tags[0] || ''; // get the first one because it's sorted by count number
-                            if(_.some(top_tags, {name: tag.name})) {
-                                let dblIndex = _.findIndex(top_tags, item => {
-                                    return item.name == tag.name;
-                                });
-                                top_tags[dblIndex].count++;
-                            } else {
-                                if(tag.name !== undefined) {
-                                    top_tags.push({
-                                        name: tag.name,
-                                        count: 1
-                                    });
+                            const tags = data.toptags.tag.slice(0, 10).map(obj => obj.name).filter((tag) => {
+                                if (/^\d+$/.test(tag) // check for year tags, thank you estremadures
+                            || tag.toLowerCase().indexOf('albums i') !== -1
+                            || tag.toLowerCase().indexOf('best of') !== -1
+                            || tag.toLowerCase().indexOf('favorite') !== -1
+                            || tag.toLowerCase().indexOf('favourite') !== -1
+                            || tag.split(' ').length > 3) {
+                                return false;
                                 }
-                            }
+                                return true;
+                            });
+                            tags.forEach((tag) => {
+                                topTags.push(tag);
+                            });
                             iterator++;
-                            if(iterator == limit) {
-                                let genres = [];
-                                let count = [];
-                                _.map(top_tags, item => {
-                                    if(typeof item !== 'undefined') {
-                                        genres.push(item.name);
-                                        count.push(item.count);
-                                    }
+                            if (iterator == limit) {
+                                console.log(topTags);
+                                topTags.forEach((item) => {
+                                    topTagsCount[item] = (topTagsCount[item] || 0) + 1;
                                 });
-                                buildGenres(tagsChart, genres, count, user);
+                                topTags = _.uniq(topTags);
+                                console.log(topTagsCount);
                             }
                         },
                         error: (code, message) => {
@@ -164,6 +158,10 @@
                         }
                     });
                 });
+                topTags.forEach((item) => {
+                    topTagsCount[item] = (topTagsCount[item] || 0) + 1;
+                });
+                topTags = _.uniq(topTags);
             }, error: function (code, message) {
                 console.log(message);
             }
