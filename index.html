@@ -96,6 +96,21 @@
       });
     }
 
+    function buildTopTracks(chart, labels, values, user) {
+        var tracksChart = new Chart(chart, {
+            type: 'horizontalBar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: user+ 'dataset',
+                        data: values,
+                    }
+                ]
+            }
+        })
+    }
+
     //LASTFM LIB FUNCTIONS
     //cache
     var cache = new LastFMCache();
