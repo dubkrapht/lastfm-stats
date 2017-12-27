@@ -97,18 +97,18 @@
     }
 
     function buildTopTracks(chart, labels, values, user) {
-        let tracksChart = new Chart(chart, {
-          type: 'horizontalBar',
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: user+ 'dataset',
-                data: values,
-              }
-            ]
-          }
-        })
+      let tracksChart = new Chart(chart, {
+        type: 'horizontalBar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: user+ 'dataset',
+              data: values,
+            }
+          ]
+        }
+      });
     }
 
     //LASTFM LIB FUNCTIONS
@@ -119,29 +119,28 @@
     let lastfm = new LastFM({
       apiKey: '76305a32595a40f5d298af26c890a9b9',
       apiSecret: '629f12eb1d53f50c80d4688192db2d15',
-      cache: cache
+      cache: cache,
     });
 
     let iterator = 0;
-    let h = [1, 2];
     //get top albums and use this data for genres afterwards
-    function getTopTags(username, period, limit, user) {
-      let topTags = [];
-      let topPlays = [];
-      let topAlbums = [];
+    function getTopTags(username, period, limit) {
+      const topTags = [];
+      const topPlays = [];
+      const topAlbums = [];
       let topTagsCount = {};
       lastfm.user.getTopAlbums({
         user: username,
         period: period,
         limit: limit
       }, {
-        success: function (data) {
+        success: (data) => {
           const top_albums = data.topalbums.album;
           _.map(top_albums, item => {
             topAlbums.push(item.name + " by " + item.artist.name);
             topPlays.push(item.playcount);
           });
-          buildTopPlays(albumsChart, topAlbums, topPlays, user);
+          buildTopPlays(albumsChart, topAlbums, topPlays, username);
           _.forEach(top_albums, (album) => {
             lastfm.album.getTopTags({
               artist: album.artist.name,
@@ -166,16 +165,13 @@
                 });
                 iterator++;
                 if (iterator == limit) {
-                  h.push(iterator);
-                  console.log(h);
                   topTags.forEach((item) => {
                     topTagsCount[item] = (topTagsCount[item] || 0) + 1;
                   });
-                  topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), function (a) {
+                  topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), (a) => {
                     return a[1]
                   }).reverse());
-                  buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(
-                    topTagsCount).slice(0, limit), user);
+                  buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(topTagsCount).slice(0, limit), username);
                   // reset chart
                   iterator = 0;
                 }
@@ -186,7 +182,7 @@
             });
           });
         },
-        error: function (code, message) {
+        error: (code, message) => {
           console.log(message);
         }
       });
@@ -197,11 +193,8 @@
       document.getElementById('')
       const username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
-      let limit = document.getElementById('limit').value;
-      if (limit === '') {
-        limit = 50;
-      }
-      getTopTags(username, period, limit, username);
+      let limit = document.getElementById('limit').value || 50;
+      getTopTags(username, period, limit);
     });
   </script>
 </body>
