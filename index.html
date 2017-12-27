@@ -54,10 +54,10 @@
       let tagsChart = new Chart(chart, {
         type: 'radar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
             label: user + " dataset",
-            data: data,
+            data,
             borderColor: [
               'rgba(33,33,33,1)'
             ],
@@ -83,28 +83,28 @@
       });
     }
 
-    function buildTopPlays(chart, labels, values, user) {
+    function buildTopPlays(chart, labels, data, user) {
       let albumsChart = new Chart(chart, {
         type: 'horizontalBar',
         data: {
-          labels: labels,
+          labels,
           datasets: [{
             label: user + ' dataset',
-            data: values
+            data,
           }]
         }
       });
     }
 
-    function buildTopTracks(chart, labels, values, user) {
+    function buildTopTracks(chart, labels, data, user) {
       let tracksChart = new Chart(chart, {
         type: 'horizontalBar',
         data: {
           labels: labels,
           datasets: [
             {
-              label: user+ 'dataset',
-              data: values,
+              label: user + ' dataset',
+              data,
             }
           ]
         }
@@ -123,6 +123,26 @@
     });
 
     let iterator = 0;
+    function getTopTracks(username, period, limit) {
+      const topTracks = [];
+      const topTracksPlays = [];
+      lastfm.user.getTopTracks({
+        user: username,
+        period,
+        limit,
+      }, {
+        success: (data) => {
+          data.toptracks.track.forEach((track) => {
+            topTracks.push(track.name + " by " + track.artist.name);
+            topTracksPlays.push(track.playcount);
+          });
+          buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
+        },
+        error: (code, message) => {
+          console.log(message);
+        }
+      });
+    }
     //get top albums and use this data for genres afterwards
     function getTopTags(username, period, limit) {
       const topTags = [];
@@ -131,8 +151,8 @@
       let topTagsCount = {};
       lastfm.user.getTopAlbums({
         user: username,
-        period: period,
-        limit: limit
+        period,
+        limit,
       }, {
         success: (data) => {
           const top_albums = data.topalbums.album;
@@ -195,6 +215,7 @@
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
       getTopTags(username, period, limit);
+      getTopTracks(username, period, limit);
     });
   </script>
 </body>
