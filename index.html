@@ -4,113 +4,55 @@
 <head>
   <meta charset="UTF-8">
   <title>Last Fm Statistics</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="./assets/js/charts/options.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-
 <body>
-  <div id="wrapper">
-    <div id="content">
-      <div class="canvas-container">
-        <canvas id="tagsChart"></canvas>
+  <div class="container">
+    <div class="row">
+      <div class="col-4">
+        <div class="canvas-container">
+          <canvas id="tagsChart"></canvas>
+        </div>
       </div>
-      <div class="canvas-container">
-        <canvas id="albumsChart"></canvas>
+      <div class="col-4">
+        <div class="canvas-container">
+          <canvas id="albumsChart"></canvas>
+        </div>
       </div>
-      <div class="canvas-container">
-        <canvas id="tracksChart"></canvas>
-      </div>
-      <div class="canvas-container">
-        <canvas id="rankingsChart"></canvas>
+      <div class="col-4">
+        <div class="canvas-container">
+          <canvas id="tracksChart"></canvas>
+        </div>
       </div>
     </div>
+    <label for="username">Last FM Username</label>
+    <input type="text" name="username" id="username">
+    <label for="period">Period</label>
+    <select name="period" id="period">
+      <option value="overall">Overall</option>
+      <option value="1month">30 Days</option>
+      <option value="3month">3 Months</option>
+      <option value="6month">6 MOnths</option>
+      <option value="12month">1 Year</option>
+    </select>
+    <label for="limit">Stats Limit (Defaults to 50)</label>
+    <input type="text" id="limit">
+    <button id="submit">Get Stats</button>
   </div>
-  <label for="username">Last FM Username</label>
-  <input type="text" name="username" id="username">
-  <label for="period">Period</label>
-  <select name="period" id="period">
-    <option value="overall">Overall</option>
-    <option value="1month">30 Days</option>
-    <option value="3month">3 Months</option>
-    <option value="6month">6 MOnths</option>
-    <option value="12month">1 Year</option>
-  </select>
-  <label for="limit">Stats Limit (Defaults to 50)</label>
-  <input type="text" id="limit">
-  <button id="submit">Get Stats</button>
   <script>
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");
     let albumsChart = document.getElementById("albumsChart");
     let tracksChart = document.getElementById("tracksChart");
     let rankingsChart = document.getElementById("rankingsChart");
-
-    // CHART FUNCTIONS
-    function buildGenres(chart, labels, data, user) {
-      let tagsChart = new Chart(chart, {
-        type: 'radar',
-        data: {
-          labels,
-          datasets: [{
-            label: user + " dataset",
-            data,
-            borderColor: [
-              'rgba(33,33,33,1)'
-            ],
-            backgroundColor: [
-              'rgba(33,33,33,0.7)'
-            ],
-            borderWidth: 1,
-            pointRadius: 0
-          }]
-        },
-        options: {
-          responsive: false,
-          scale: {
-            ticks: {
-              display: false,
-              beginAtZero: true,
-              min: 0,
-              max: 5,
-              stepSize: 5
-            }
-          }
-        }
-      });
-    }
-
-    function buildTopPlays(chart, labels, data, user) {
-      let albumsChart = new Chart(chart, {
-        type: 'horizontalBar',
-        data: {
-          labels,
-          datasets: [{
-            label: user + ' dataset',
-            data,
-          }]
-        }
-      });
-    }
-
-    function buildTopTracks(chart, labels, data, user) {
-      let tracksChart = new Chart(chart, {
-        type: 'horizontalBar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: user + ' dataset',
-              data,
-            }
-          ]
-        }
-      });
-    }
-
+    
     //LASTFM LIB FUNCTIONS
     //cache
     let cache = new LastFMCache();
@@ -122,6 +64,16 @@
       cache: cache,
     });
 
+    let options = new Option();
+    function buildTopTracks(chart, labels, data, username) {
+      const h = new Chart(chart, options.topTracks(labels, data, username));
+    }
+    function buildTopPlays(chart, labels, data, username) {
+      const h = new Chart(chart, options.topPlays(labels, data, username));
+    }
+    function buildGenres(chart, labels, data, username) {
+      const h = new Chart(chart, options.genres(labels, data, username));
+    }
     let iterator = 0;
     function getTopTracks(username, period, limit) {
       const topTracks = [];
@@ -177,9 +129,9 @@
                     tag.toLowerCase() === album.artist.name ||
                     tag.split(' ').length > 3) {
                     return false;
-                  }
-                  return true;
-                });
+                }
+                return true;
+              });
                 tags.forEach((tag) => {
                   topTags.push(tag);
                 });
@@ -218,6 +170,9 @@
       getTopTracks(username, period, limit);
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
 
 </html>
