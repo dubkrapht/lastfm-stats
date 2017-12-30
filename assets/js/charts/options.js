@@ -1,6 +1,6 @@
 function Option() {
-	// CHART FUNCTIONS
-  this.genres = function(labels, data, user) {
+	// options for building the charts
+  this.genres = (labels, data, user) => {
     return {
       type: 'radar',
       data: {
@@ -33,7 +33,7 @@ function Option() {
     }
   };
 
-  this.topPlays = function(labels, data, user) {
+  this.topPlays = (labels, data, user) => {
     return {
       type: 'horizontalBar',
       data: {
@@ -49,7 +49,7 @@ function Option() {
     };
   }
 
-  this.topTracks = function(labels, data, user) {
+  this.topTracks = (labels, data, user) => {
     return {
       type: 'horizontalBar',
       data: {
