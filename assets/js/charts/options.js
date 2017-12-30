@@ -6,7 +6,7 @@ function Option() {
       data: {
         labels,
         datasets: [{
-          label: user + " dataset",
+          label: `${user} Top Genres`,
           data,
           borderColor: [
           'rgba(33,33,33,1)'
@@ -25,8 +25,7 @@ function Option() {
             display: false,
             beginAtZero: true,
             min: 0,
-            max: 5,
-            stepSize: 5
+            stepSize: data[0],
           }
         }
       }
@@ -39,12 +38,12 @@ function Option() {
       data: {
         labels,
         datasets: [{
-          label: user + ' dataset',
+          label: `${user} Top Albums`,
           data,
         }]
       },
       options: {
-        responsive: true,
+        responsive: true,	
       }
     };
   }
@@ -56,7 +55,7 @@ function Option() {
         labels: labels,
         datasets: [
         {
-          label: user + ' dataset',
+          label: `${user} Top Tracks`,
           data,
         }
         ]

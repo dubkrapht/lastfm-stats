@@ -15,19 +15,19 @@
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-  <div class="container">
+  <!-- <div class="container"> -->
     <div class="row">
-      <div class="col-4">
+      <div class="col-md-4 chartWrapper">
         <div class="canvas-container">
           <canvas id="tagsChart"></canvas>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-md-4 chartWrapper">
         <div class="canvas-container">
           <canvas id="albumsChart"></canvas>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-md-4 chartWrapper">
         <div class="canvas-container">
           <canvas id="tracksChart"></canvas>
         </div>
@@ -47,7 +47,7 @@
     <label for="limit">Stats Limit (Defaults to 50)</label>
     <input type="text" id="limit">
     <button id="submit">Get Stats</button>
-  </div>
+  <!-- </div> -->
   <script>
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");
@@ -68,13 +68,13 @@
 
     let options = new Option();
     function buildTopTracks(chart, labels, data, username) {
-      const h = new Chart(chart, options.topTracks(labels, data, username));
+      new Chart(chart, options.topTracks(labels, data, username));
     }
     function buildTopPlays(chart, labels, data, username) {
-      const h = new Chart(chart, options.topPlays(labels, data, username));
+      new Chart(chart, options.topPlays(labels, data, username));
     }
     function buildGenres(chart, labels, data, username) {
-      const h = new Chart(chart, options.genres(labels, data, username));
+      new Chart(chart, options.genres(labels, data, username));
     }
 
     let submitButton = document.getElementById('submit');

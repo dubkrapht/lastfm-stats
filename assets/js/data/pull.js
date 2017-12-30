@@ -68,6 +68,7 @@ function Pull() {
                 topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), (a) => {
                   return a[1]
                 }).reverse());
+                console.log(topTagsCount);
                 buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(topTagsCount).slice(0, limit), username);
                 // reset chart
                 iterator = 0;
