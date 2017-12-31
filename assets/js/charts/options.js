@@ -65,4 +65,22 @@ function Option() {
       }
     };
   }
+
+  this.topArtists = (labels, data, user) => {
+    return {
+      type: 'horizontalBar',
+      data: {
+        labels: labels,
+        datasets: [
+        {
+          label: `${user} Top Artists`,
+          data,
+        }
+        ]
+      },
+      options: {
+        responsive: true,
+      }
+    };
+  }
 }

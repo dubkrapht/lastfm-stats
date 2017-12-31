@@ -85,4 +85,25 @@ function Pull() {
       }
     });
   }
+
+  this.getTopArtists = (username, period, limit) => {
+    const topArtists = [];
+    const topArtistsPlays = [];
+    lastfm.user.getTopArtists({
+      user: username,
+      period,
+      limit,
+    }, {
+      success: (data) => {
+        data.topartists.artist.forEach((artist) => {
+          topArtists.push(artist.name);
+          topArtistsPlays.push(artist.playcount);
+        });
+        buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);
+      },
+      error: (code, message) => {
+        console.log(message);
+      }
+    });
+  }
 }

@@ -15,45 +15,55 @@
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-  <!-- <div class="container"> -->
-    <div class="row">
-      <div class="col-md-4 chartWrapper">
-        <div class="canvas-container">
-          <canvas id="tagsChart"></canvas>
-        </div>
-      </div>
-      <div class="col-md-4 chartWrapper">
-        <div class="canvas-container">
-          <canvas id="albumsChart"></canvas>
-        </div>
-      </div>
-      <div class="col-md-4 chartWrapper">
-        <div class="canvas-container">
-          <canvas id="tracksChart"></canvas>
-        </div>
+  <div class="row">
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="albumsChart"></canvas>
       </div>
     </div>
-    <label for="username">Last FM Username</label>
-    <input type="text" name="username" id="username">
-    <label for="period">Period</label>
-    <select name="period" id="period">
-      <option value="7day">7 Days</option>
-      <option value="1month">30 Days</option>
-      <option value="3month">3 Months</option>
-      <option value="6month">6 Months</option>
-      <option value="12month">1 Year</option>
-      <option value="overall">Overall</option>
-    </select>
-    <label for="limit">Stats Limit (Defaults to 50)</label>
-    <input type="text" id="limit">
-    <button id="submit">Get Stats</button>
-  <!-- </div> -->
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tracksChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="artistsChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <label for="username">Last FM Username</label>
+  <input type="text" name="username" id="username">
+  <label for="period">Period</label>
+  <select name="period" id="period">
+    <option value="7day">7 Days</option>
+    <option value="1month">30 Days</option>
+    <option value="3month">3 Months</option>
+    <option value="6month">6 Months</option>
+    <option value="12month">1 Year</option>
+    <option value="overall">Overall</option>
+  </select>
+  <label for="limit">Stats Limit (Defaults to 50)</label>
+  <input type="text" id="limit">
+  <button id="submit">Get Stats</button>
   <script>
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");
     let albumsChart = document.getElementById("albumsChart");
     let tracksChart = document.getElementById("tracksChart");
-    let rankingsChart = document.getElementById("rankingsChart");
+    let artistsChart = document.getElementById("artistsChart");
     
     //LASTFM LIB FUNCTIONS
     //cache
@@ -76,6 +86,9 @@
     function buildGenres(chart, labels, data, username) {
       new Chart(chart, options.genres(labels, data, username));
     }
+    function buildTopArtists(chart, labels, data, username) {
+      new Chart(chart, options.topArtists(labels, data, username));
+    }
 
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
@@ -86,6 +99,7 @@
       let pull = new Pull();
       pull.getTopTags(username, period, limit);
       pull.getTopTracks(username, period, limit);
+      pull.getTopArtists(username, period, limit);
     });
   </script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
