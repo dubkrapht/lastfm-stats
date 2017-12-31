@@ -4,28 +4,43 @@
 <head>
   <meta charset="UTF-8">
   <title>Last Fm Statistics</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
+  <script type="text/javascript" src="./assets/js/charts/options.js"></script>
+  <script type="text/javascript" src="./assets/js/data/pull.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-
 <body>
-  <div id="wrapper">
-    <div id="content">
-      <div class="canvas-container">
-        <canvas id="tagsChart"></canvas>
-      </div>
+  <div class="row">
+    <div class="col-md-4 chartWrapper">
       <div class="canvas-container">
         <canvas id="albumsChart"></canvas>
       </div>
+    </div>
+    <div class="col-md-4 chartWrapper">
       <div class="canvas-container">
         <canvas id="tracksChart"></canvas>
       </div>
+    </div>
+    <div class="col-md-4 chartWrapper">
       <div class="canvas-container">
-        <canvas id="rankingsChart"></canvas>
+        <canvas id="artistsChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
       </div>
     </div>
   </div>
@@ -33,11 +48,12 @@
   <input type="text" name="username" id="username">
   <label for="period">Period</label>
   <select name="period" id="period">
-    <option value="overall">Overall</option>
+    <option value="7day">7 Days</option>
     <option value="1month">30 Days</option>
     <option value="3month">3 Months</option>
-    <option value="6month">6 MOnths</option>
+    <option value="6month">6 Months</option>
     <option value="12month">1 Year</option>
+    <option value="overall">Overall</option>
   </select>
   <label for="limit">Stats Limit (Defaults to 50)</label>
   <input type="text" id="limit">
@@ -47,70 +63,8 @@
     let tagsChart = document.getElementById("tagsChart");
     let albumsChart = document.getElementById("albumsChart");
     let tracksChart = document.getElementById("tracksChart");
-    let rankingsChart = document.getElementById("rankingsChart");
-
-    // CHART FUNCTIONS
-    function buildGenres(chart, labels, data, user) {
-      let tagsChart = new Chart(chart, {
-        type: 'radar',
-        data: {
-          labels,
-          datasets: [{
-            label: user + " dataset",
-            data,
-            borderColor: [
-              'rgba(33,33,33,1)'
-            ],
-            backgroundColor: [
-              'rgba(33,33,33,0.7)'
-            ],
-            borderWidth: 1,
-            pointRadius: 0
-          }]
-        },
-        options: {
-          responsive: false,
-          scale: {
-            ticks: {
-              display: false,
-              beginAtZero: true,
-              min: 0,
-              max: 5,
-              stepSize: 5
-            }
-          }
-        }
-      });
-    }
-
-    function buildTopPlays(chart, labels, data, user) {
-      let albumsChart = new Chart(chart, {
-        type: 'horizontalBar',
-        data: {
-          labels,
-          datasets: [{
-            label: user + ' dataset',
-            data,
-          }]
-        }
-      });
-    }
-
-    function buildTopTracks(chart, labels, data, user) {
-      let tracksChart = new Chart(chart, {
-        type: 'horizontalBar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: user + ' dataset',
-              data,
-            }
-          ]
-        }
-      });
-    }
-
+    let artistsChart = document.getElementById("artistsChart");
+    
     //LASTFM LIB FUNCTIONS
     //cache
     let cache = new LastFMCache();
@@ -122,90 +76,18 @@
       cache: cache,
     });
 
-    let iterator = 0;
-    function getTopTracks(username, period, limit) {
-      const topTracks = [];
-      const topTracksPlays = [];
-      lastfm.user.getTopTracks({
-        user: username,
-        period,
-        limit,
-      }, {
-        success: (data) => {
-          data.toptracks.track.forEach((track) => {
-            topTracks.push(track.name + " by " + track.artist.name);
-            topTracksPlays.push(track.playcount);
-          });
-          buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
-        },
-        error: (code, message) => {
-          console.log(message);
-        }
-      });
+    let options = new Option();
+    function buildTopTracks(chart, labels, data, username) {
+      new Chart(chart, options.topTracks(labels, data, username));
     }
-    //get top albums and use this data for genres afterwards
-    function getTopTags(username, period, limit) {
-      const topTags = [];
-      const topPlays = [];
-      const topAlbums = [];
-      let topTagsCount = {};
-      lastfm.user.getTopAlbums({
-        user: username,
-        period,
-        limit,
-      }, {
-        success: (data) => {
-          const top_albums = data.topalbums.album;
-          _.map(top_albums, item => {
-            topAlbums.push(item.name + " by " + item.artist.name);
-            topPlays.push(item.playcount);
-          });
-          buildTopPlays(albumsChart, topAlbums, topPlays, username);
-          _.forEach(top_albums, (album) => {
-            lastfm.album.getTopTags({
-              artist: album.artist.name,
-              album: album.name
-            }, {
-              success: data => {
-                const tags = data.toptags.tag.slice(0, 10).map(obj => obj.name).filter((tag) => {
-                  if (/^\d+$/.test(tag) // check for year tags, thank you estremadures
-                    ||
-                    tag.toLowerCase().indexOf('albums i') !== -1 ||
-                    tag.toLowerCase().indexOf('best of') !== -1 ||
-                    tag.toLowerCase().indexOf('favorite') !== -1 ||
-                    tag.toLowerCase().indexOf('favourite') !== -1 ||
-                    tag.toLowerCase() === album.artist.name ||
-                    tag.split(' ').length > 3) {
-                    return false;
-                  }
-                  return true;
-                });
-                tags.forEach((tag) => {
-                  topTags.push(tag);
-                });
-                iterator++;
-                if (iterator == limit) {
-                  topTags.forEach((item) => {
-                    topTagsCount[item] = (topTagsCount[item] || 0) + 1;
-                  });
-                  topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), (a) => {
-                    return a[1]
-                  }).reverse());
-                  buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(topTagsCount).slice(0, limit), username);
-                  // reset chart
-                  iterator = 0;
-                }
-              },
-              error: (code, message) => {
-                console.log(message);
-              }
-            });
-          });
-        },
-        error: (code, message) => {
-          console.log(message);
-        }
-      });
+    function buildTopPlays(chart, labels, data, username) {
+      new Chart(chart, options.topPlays(labels, data, username));
+    }
+    function buildGenres(chart, labels, data, username) {
+      new Chart(chart, options.genres(labels, data, username));
+    }
+    function buildTopArtists(chart, labels, data, username) {
+      new Chart(chart, options.topArtists(labels, data, username));
     }
 
     let submitButton = document.getElementById('submit');
@@ -214,10 +96,15 @@
       const username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
-      getTopTags(username, period, limit);
-      getTopTracks(username, period, limit);
+      let pull = new Pull();
+      pull.getTopTags(username, period, limit);
+      pull.getTopTracks(username, period, limit);
+      pull.getTopArtists(username, period, limit);
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
 
 </html>
