@@ -52,6 +52,7 @@ function Pull() {
                   tag.toLowerCase().indexOf('favorite') !== -1 ||
                   tag.toLowerCase().indexOf('favourite') !== -1 ||
                   tag.toLowerCase() === album.artist.name ||
+                  tag.toLowerCase().indexOf('awesome') !== -1 ||
                   tag.split(' ').length > 3) {
                   return false;
               }
