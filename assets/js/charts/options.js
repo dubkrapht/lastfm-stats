@@ -43,7 +43,14 @@ function Option() {
         }]
       },
       options: {
-        responsive: true,	
+        responsive: true,
+        scales: {
+          xAxes: [{
+            ticks: {
+              stepSize: 10
+            }
+          }]
+        }
       }
     };
   }
@@ -62,6 +69,13 @@ function Option() {
       },
       options: {
         responsive: true,
+        scales: {
+          xAxes: [{
+            ticks: {
+              stepSize: 5
+            }
+          }]
+        }
       }
     };
   }
@@ -80,6 +94,13 @@ function Option() {
       },
       options: {
         responsive: true,
+        scales: {
+          xAxes: [{
+            ticks: {
+              stepSize: 10
+            }
+          }]
+        }
       }
     };
   }
