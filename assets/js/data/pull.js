@@ -13,6 +13,7 @@ function Pull() {
           topTracks.push(track.name + " by " + track.artist.name);
           topTracksPlays.push(track.playcount);
         });
+        document.querySelector('#topArtist > img').setAttribute('src', data.toptracks.track[0].image[3]['#text']);
         buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
       },
       error: (code, message) => {
@@ -37,6 +38,7 @@ function Pull() {
           topAlbums.push(item.name + " by " + item.artist.name);
           topPlays.push(item.playcount);
         });
+        document.querySelector('#topAlbum > img').setAttribute('src', data.topalbums.album[0].image[3]['#text']);
         buildTopPlays(albumsChart, topAlbums, topPlays, username);
         _.forEach(top_albums, (album) => {
           lastfm.album.getTopTags({
@@ -100,6 +102,7 @@ function Pull() {
           topArtists.push(artist.name);
           topArtistsPlays.push(artist.playcount);
         });
+        document.querySelector('#topArtist > img').setAttribute('src', data.topartists.artist[0].image[3]['#text']);
         buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);
       },
       error: (code, message) => {
