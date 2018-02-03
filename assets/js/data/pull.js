@@ -13,7 +13,8 @@ function Pull() {
           topTracks.push(track.name + " by " + track.artist.name);
           topTracksPlays.push(track.playcount);
         });
-        document.querySelector('#topArtist > img').setAttribute('src', data.toptracks.track[0].image[3]['#text']);
+        console.log(data.toptracks.track[0].image[3]['#text']);
+        document.querySelector('#topTrack > img').setAttribute('src', data.toptracks.track[0].image[3]['#text']);
         buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
       },
       error: (code, message) => {
@@ -71,7 +72,6 @@ function Pull() {
                 topTagsCount = _.fromPairs(_.sortBy(_.toPairs(topTagsCount), (a) => {
                   return a[1]
                 }).reverse());
-                console.log(topTagsCount);
                 buildGenres(tagsChart, Object.keys(topTagsCount).slice(0, limit), Object.values(topTagsCount).slice(0, limit), username);
                 // reset chart
                 iterator = 0;

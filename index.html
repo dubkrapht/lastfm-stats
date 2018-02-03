@@ -17,7 +17,11 @@
 </head>
 <body>
   <div class="row">
-    <h3>Currently Loving</h3>
+    <div class="col-md-12">
+      <h4 style="text-align: center">Currently Loving</h4>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-4" id="topTrack">
       <img src="" alt="">
       <p></p>
@@ -105,7 +109,6 @@
 
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
-      document.getElementById('')
       const username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
