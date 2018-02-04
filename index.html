@@ -16,65 +16,85 @@
   <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-  <div class="row">
-    <div class="col-md-12">
-      <h4 style="text-align: center">Currently Loving</h4>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4" id="topTrack">
-      <img src="" alt="">
-      <p></p>
-    </div>
-    <div class="col-md-4" id="topAlbum">
-      <img src="" alt="">
-      <p></p>
-    </div>
-    <div class="col-md-4" id="topArtist">
-      <img src="" alt="">
-      <p></p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6 chartWrapper">
-      <div class="canvas-container">
-        <canvas id="albumsChart"></canvas>
+  <!-- <div class="container"> -->
+    <div class="row">
+      <div class="col-md-12">
+        <h4 style="text-align: center">Currently Loving</h4>
       </div>
     </div>
-    <div class="col-md-6 chartWrapper">
-      <div class="canvas-container">
-        <canvas id="tracksChart"></canvas>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-4" id="topTrackImg">
+            <img src="" alt="">
+          </div>
+          <div class="col-md-8" id="topTrackName">
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-4" id="topAlbumImg">
+            <img src="" alt="">
+          </div>
+          <div class="col-md-8" id="topAlbumName">
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-4" id="topArtistImg">
+            <img src="" alt="">
+          </div>
+          <div class="col-md-8" id="topArtistName">
+            <p></p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row"></div>
-    <div class="col-md-6 chartWrapper">
-      <div class="canvas-container">
-        <canvas id="artistsChart"></canvas>
+    <div class="row">
+      <div class="col-md-6 chartWrapper">
+        <div class="canvas-container">
+          <canvas id="albumsChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6 chartWrapper">
+        <div class="canvas-container">
+          <canvas id="tracksChart"></canvas>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-3 chartWrapper">
-      <div class="canvas-container">
-        <canvas id="tagsChart"></canvas>
+    <div class="row"></div>
+      <div class="col-md-6 chartWrapper">
+        <div class="canvas-container">
+          <canvas id="artistsChart"></canvas>
+        </div>
       </div>
     </div>
-  </div>
-  <label for="username">Last FM Username</label>
-  <input type="text" name="username" id="username">
-  <label for="period">Period</label>
-  <select name="period" id="period">
-    <option value="7day">7 Days</option>
-    <option value="1month">30 Days</option>
-    <option value="3month">3 Months</option>
-    <option value="6month">6 Months</option>
-    <option value="12month">1 Year</option>
-    <option value="overall">Overall</option>
-  </select>
-  <label for="limit">Stats Limit (Defaults to 50)</label>
-  <input type="text" id="limit">
-  <button id="submit">Get Stats</button>
+    <div class="row">
+      <div class="col-md-3 chartWrapper">
+        <div class="canvas-container">
+          <canvas id="tagsChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <label for="username">Last FM Username</label>
+    <input type="text" name="username" id="username">
+    <label for="period">Period</label>
+    <select name="period" id="period">
+      <option value="7day">7 Days</option>
+      <option value="1month">30 Days</option>
+      <option value="3month">3 Months</option>
+      <option value="6month">6 Months</option>
+      <option value="12month">1 Year</option>
+      <option value="overall">Overall</option>
+    </select>
+    <label for="limit">Stats Limit (Defaults to 50)</label>
+    <input type="text" id="limit">
+    <button id="submit">Get Stats</button>
+  <!-- </div> -->
   <script>
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");

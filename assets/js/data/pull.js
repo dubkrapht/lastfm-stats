@@ -13,8 +13,8 @@ function Pull() {
           topTracks.push(track.name + " by " + track.artist.name);
           topTracksPlays.push(track.playcount);
         });
-        console.log(data.toptracks.track[0].image[3]['#text']);
-        document.querySelector('#topTrack > img').setAttribute('src', data.toptracks.track[0].image[3]['#text']);
+        document.querySelector('#topTrackImg > img').setAttribute('src', data.toptracks.track[0].image[2]['#text']);
+        document.querySelector('#topTrackName > p').innerHTML = topTracks[0];
         buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
       },
       error: (code, message) => {
@@ -39,7 +39,8 @@ function Pull() {
           topAlbums.push(item.name + " by " + item.artist.name);
           topPlays.push(item.playcount);
         });
-        document.querySelector('#topAlbum > img').setAttribute('src', data.topalbums.album[0].image[3]['#text']);
+        document.querySelector('#topAlbumImg > img').setAttribute('src', data.topalbums.album[0].image[2]['#text']);
+        document.querySelector('#topAlbumName > p').innerHTML = topAlbums[0];
         buildTopPlays(albumsChart, topAlbums, topPlays, username);
         _.forEach(top_albums, (album) => {
           lastfm.album.getTopTags({
@@ -102,7 +103,8 @@ function Pull() {
           topArtists.push(artist.name);
           topArtistsPlays.push(artist.playcount);
         });
-        document.querySelector('#topArtist > img').setAttribute('src', data.topartists.artist[0].image[3]['#text']);
+        document.querySelector('#topArtistImg > img').setAttribute('src', data.topartists.artist[0].image[2]['#text']);
+        document.querySelector('#topArtistName > p').innerHTML = topArtists[0];
         buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);
       },
       error: (code, message) => {
