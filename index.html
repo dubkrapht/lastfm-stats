@@ -13,7 +13,7 @@
   <script type="text/javascript" src="./assets/js/data/pull.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./assets/css/style.css">
@@ -70,53 +70,53 @@
       </div>
     </div>
     <div class="row"></div>
-      <div class="col-md-6 chartWrapper">
-        <div class="canvas-container">
-          <canvas id="artistsChart"></canvas>
-        </div>
+    <div class="col-md-6 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="artistsChart"></canvas>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-3 chartWrapper">
-        <div class="canvas-container">
-          <canvas id="tagsChart"></canvas>
-        </div>
-      </div>
-    </div>
-    <label for="username">Last FM Username</label>
-    <input type="text" name="username" id="username">
-    <label for="period">Period</label>
-    <select name="period" id="period">
-      <option value="7day">7 Days</option>
-      <option value="1month">30 Days</option>
-      <option value="3month">3 Months</option>
-      <option value="6month">6 Months</option>
-      <option value="12month">1 Year</option>
-      <option value="overall">Overall</option>
-    </select>
-    <label for="limit">Stats Limit (Defaults to 50)</label>
-    <input type="text" id="limit">
-    <button id="submit">Get Stats</button>
   </div>
+  <div class="row">
+    <div class="col-md-3 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="tagsChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <label for="username">Last FM Username</label>
+  <input type="text" name="username" id="username">
+  <label for="period">Period</label>
+  <select name="period" id="period">
+    <option value="7day">7 Days</option>
+    <option value="1month">30 Days</option>
+    <option value="3month">3 Months</option>
+    <option value="6month">6 Months</option>
+    <option value="12month">1 Year</option>
+    <option value="overall">Overall</option>
+  </select>
+  <label for="limit">Stats Limit (Defaults to 50)</label>
+  <input type="text" id="limit">
+  <button id="submit">Get Stats</button>
+</div>
 
-  <a href="#" data-toggle="modal" data-target="#modChart" data-source="65.1,59.47,80.00,81.11,56.67,55.45,40.88,20.45,40.98,80.66,88.34,61.01" data-target-source="50">Example</a>
-  <!-- modal -->
-  <div class="modal fade" id="modChart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <canvas id="canvas" width="1200" height="600"></canvas>
-        </div>
+<a href="#" data-toggle="modal" data-target="#modChart" data-source="65.1,59.47,80.00,81.11,56.67,55.45,40.88,20.45,40.98,80.66,88.34,61.01" data-target-source="50">Example</a>
+<!-- modal -->
+<div class="modal fade" id="modChart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <canvas id="canvas" width="1200" height="600"></canvas>
       </div>
     </div>
   </div>
-  <script>
+</div>
+<script>
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");
     let albumsChart = document.getElementById("albumsChart");
@@ -158,20 +158,19 @@
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
     });
-$('#modChart').on('shown.bs.modal', (e) => {
-    var modal = $(this);
-    var canvas = modal.find('.modal-body canvas');
-    var ctx = canvas[0].getContext("2d");
-    var chart = new Chart(ctx, options.topArtists(labels, data, username));
-}).on('hidden.bs.modal',function(event){
+    $('#modChart').on('shown.bs.modal', (e) => {
+      var modal = $(this);
+      var ctx = document.querySelector('.modal-body canvas').getContext('2d');
+      // var chart = new Chart(ctx, options.topArtists(topArtists, topArtistsPlays, yoann303));
+    }).on('hidden.bs.modal',function(event) {
     // reset canvas size
     var modal = $(this);
     var canvas = modal.find('.modal-body canvas');
     canvas.attr('width','568px').attr('height','300px');
     // destroy modal
     $(this).data('bs.modal', null);
-});
-  </script>
+  });
+</script>
 </body>
 
 </html>
