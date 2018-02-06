@@ -1,4 +1,5 @@
 function Pull() {
+  this.global = {}
   let iterator = 0;
   this.getTopTracks = (username, period, limit) => {
     const topTracks = [];
@@ -103,6 +104,8 @@ function Pull() {
           topArtists.push(artist.name);
           topArtistsPlays.push(artist.playcount);
         });
+        this.global.topArtists = topArtists;
+        this.global.topArtistsPlays = topArtistsPlays;
         document.querySelector('#topArtistImg > img').setAttribute('src', data.topartists.artist[0].image[2]['#text']);
         document.querySelector('#topArtistName > p').innerHTML = topArtists[0];
         buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);

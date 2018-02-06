@@ -9,8 +9,8 @@
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.md5.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.js"></script>
   <script type="text/javascript" src="./assets/js/lib/lastfm.api.cache.js"></script>
-  <script type="text/javascript" src="./assets/js/charts/options.js"></script>
   <script type="text/javascript" src="./assets/js/data/pull.js"></script>
+  <script type="text/javascript" src="./assets/js/charts/options.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -117,6 +117,7 @@
   </div>
 </div>
 <script>
+  var pull = '';
     //chart elements lets
     let tagsChart = document.getElementById("tagsChart");
     let albumsChart = document.getElementById("albumsChart");
@@ -153,7 +154,7 @@
       const username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
-      let pull = new Pull();
+      pull = new Pull();
       pull.getTopTags(username, period, limit);
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
@@ -161,7 +162,7 @@
     $('#modChart').on('shown.bs.modal', (e) => {
       var modal = $(this);
       var ctx = document.querySelector('.modal-body canvas').getContext('2d');
-      // var chart = new Chart(ctx, options.topArtists(topArtists, topArtistsPlays, yoann303));
+      var chart = new Chart(ctx, options.topArtists(pull.global.topArtists, pull.global.topArtistsPlays, 'yoann303'));
     }).on('hidden.bs.modal',function(event) {
     // reset canvas size
     var modal = $(this);
