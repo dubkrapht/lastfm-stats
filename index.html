@@ -99,9 +99,11 @@
   <button id="submit">Get Stats</button>
 </div>
 
-<a href="#" data-toggle="modal" data-target="#modChart" data-source="65.1,59.47,80.00,81.11,56.67,55.45,40.88,20.45,40.98,80.66,88.34,61.01" data-target-source="50">Example</a>
+<a href="#" data-toggle="modal" data-target="#topArtistsModal" data-target-source="50">Example 1</a>
+<a href="#" data-toggle="modal" data-target="#topAlbumsModal" data-target-source="50">Example 2</a>
+<a href="#" data-toggle="modal" data-target="#topTracksModal" data-target-source="50">Example 3</a>
 <!-- modal -->
-<div class="modal fade" id="modChart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="topArtistsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -110,7 +112,37 @@
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="topArtistsModalBody">
+        <canvas id="canvas" width="1200" height="600"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="topAlbumsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="topAlbumsModalBody">
+        <canvas id="canvas" width="1200" height="600"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="topTracksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="topTracksModalBody">
         <canvas id="canvas" width="1200" height="600"></canvas>
       </div>
     </div>
@@ -159,18 +191,43 @@
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
     });
-    $('#modChart').on('shown.bs.modal', (e) => {
+    $('#topArtistsModal').on('shown.bs.modal', (e) => {
       var modal = $(this);
-      var ctx = document.querySelector('.modal-body canvas').getContext('2d');
+      var ctx = document.querySelector('.topArtistsModalBody canvas').getContext('2d');
       var chart = new Chart(ctx, options.topArtists(pull.global.topArtists, pull.global.topArtistsPlays, 'yoann303'));
     }).on('hidden.bs.modal',function(event) {
-    // reset canvas size
-    var modal = $(this);
-    var canvas = modal.find('.modal-body canvas');
-    canvas.attr('width','568px').attr('height','300px');
-    // destroy modal
-    $(this).data('bs.modal', null);
-  });
+      // reset canvas size
+      var modal = $(this);
+      const canvas = modal.find('.modal-body canvas');
+      canvas.attr('width','568px').attr('height','300px');
+      // destroy modal
+      $(this).data('bs.modal', null);
+    });
+    $('#topAlbumsModal').on('shown.bs.modal', (e) => {
+      var modal = $(this);
+      var ctx = document.querySelector('.topAlbumsModalBody canvas').getContext('2d');
+      console.log(pull.global);
+      const chart = new Chart(ctx, options.topPlays(pull.global.topAlbums, pull.global.topAlbumsPlays, 'yoann303'));
+    }).on('hidden.bs.modal',function(event) {
+      // reset canvas size
+      var modal = $(this);
+      var canvas = modal.find('.modal-body canvas');
+      canvas.attr('width','568px').attr('height','300px');
+      // destroy modal
+      $(this).data('bs.modal', null);
+    });
+    $('#topTracksModal').on('shown.bs.modal', (e) => {
+      var modal = $(this);
+      var ctx = document.querySelector('.topTracksModalBody canvas').getContext('2d');
+      var chart = new Chart(ctx, options.topArtists(pull.global.topTracks, pull.global.topTracksPlays, 'yoann303'));
+    }).on('hidden.bs.modal',function(event) {
+      // reset canvas size
+      var modal = $(this);
+      const canvas = modal.find('.modal-body canvas');
+      canvas.attr('width','568px').attr('height','300px');
+      // destroy modal
+      $(this).data('bs.modal', null);
+    });
 </script>
 </body>
 
