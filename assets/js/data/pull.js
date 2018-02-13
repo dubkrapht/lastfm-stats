@@ -14,6 +14,8 @@ function Pull() {
           topTracks.push(track.name + " by " + track.artist.name);
           topTracksPlays.push(track.playcount);
         });
+        this.global.topTracks = topTracks;
+        this.global.topTracksPlays = topTracksPlays;
         document.querySelector('#topTrackImg > img').setAttribute('src', data.toptracks.track[0].image[2]['#text']);
         document.querySelector('#topTrackName > p').innerHTML = topTracks[0];
         buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
@@ -40,6 +42,8 @@ function Pull() {
           topAlbums.push(item.name + " by " + item.artist.name);
           topPlays.push(item.playcount);
         });
+        this.global.topAlbums = topAlbums;
+        this.global.topAlbumsPlays = topPlays;
         document.querySelector('#topAlbumImg > img').setAttribute('src', data.topalbums.album[0].image[2]['#text']);
         document.querySelector('#topAlbumName > p').innerHTML = topAlbums[0];
         buildTopPlays(albumsChart, topAlbums, topPlays, username);
