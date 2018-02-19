@@ -25,7 +25,8 @@ function Pull() {
       }
     });
   }
-    //get top albums and use this data for genres afterwards
+
+  //get top albums and use this data for genres afterwards
   this.getTopTags = (username, period, limit) => {
     const topTags = [];
     const topPlays = [];
@@ -98,6 +99,7 @@ function Pull() {
   this.getTopArtists = (username, period, limit) => {
     const topArtists = [];
     const topArtistsPlays = [];
+    let iteratorr = 0;
     lastfm.user.getTopArtists({
       user: username,
       period,
@@ -113,6 +115,34 @@ function Pull() {
         document.querySelector('#topArtistImg > img').setAttribute('src', data.topartists.artist[0].image[2]['#text']);
         document.querySelector('#topArtistName > p').innerHTML = topArtists[0];
         buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);
+        const topArtistsTags = [];
+        let topArtistsTagsCount = {};
+        topArtists.forEach((artist) => {
+          lastfm.artist.getTopTags({
+            artist,
+          }, {
+            success: (data) => {
+              data.toptags.tag.slice(0, 10).forEach((tag) => {
+                topArtistsTags.push(tag.name);
+              });
+              iterator++;
+              if (iterator == limit) {
+                topArtistsTags.forEach((item) => {
+                  topArtistsTagsCount[item] = (topArtistsTagsCount[item] || 0) + 1;
+                });
+                topArtistsTagsCount = _.fromPairs(_.sortBy(_.toPairs(topArtistsTagsCount), (a) => {
+                  return a[1]
+                }).reverse());
+                buildTopArtistsGenres(artistsTagsChart, Object.keys(topArtistsTagsCount).slice(0, limit), Object.values(topArtistsTagsCount).slice(0, limit), username);
+                // reset chart
+                iterator = 0;
+              }
+            },
+            error: (code, message) => {
+              console.log(message);
+            }
+          });
+        });
       },
       error: (code, message) => {
         console.log(message);

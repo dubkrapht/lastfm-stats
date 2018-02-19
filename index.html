@@ -82,6 +82,11 @@
         <canvas id="tagsChart"></canvas>
       </div>
     </div>
+    <div class="col-md-3 chartWrapper">
+      <div class="canvas-container">
+        <canvas id="artistsTagsChart"></canvas>
+      </div>
+    </div>
   </div>
   <label for="username">Last FM Username</label>
   <input type="text" name="username" id="username">
@@ -155,6 +160,7 @@
     let albumsChart = document.getElementById("albumsChart");
     let tracksChart = document.getElementById("tracksChart");
     let artistsChart = document.getElementById("artistsChart");
+    let artistsTagsChart = document.getElementById("artistsTagsChart");
     
     //LASTFM LIB FUNCTIONS
     //cache
@@ -179,6 +185,9 @@
     }
     function buildTopArtists(chart, labels, data, username) {
       new Chart(chart, options.topArtists(labels, data, username));
+    }
+    function buildTopArtistsGenres(chart, labels, data, username) {
+      new Chart(chart, options.artistGenre(labels, data, username));
     }
 
     let submitButton = document.getElementById('submit');
