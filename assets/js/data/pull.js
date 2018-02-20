@@ -18,7 +18,7 @@ function Pull() {
         this.global.topTracksPlays = topTracksPlays;
         document.querySelector('#topTrackImg > img').setAttribute('src', data.toptracks.track[0].image[2]['#text']);
         document.querySelector('#topTrackName > p').innerHTML = topTracks[0];
-        buildTopTracks(tracksChart, topTracks, topTracksPlays, username);
+        buildTopTracks(tracksChart, topTracks.slice(0, 10), topTracksPlays.slice(0, 10), username);
       },
       error: (code, message) => {
         console.log(message);
@@ -47,7 +47,7 @@ function Pull() {
         this.global.topAlbumsPlays = topPlays;
         document.querySelector('#topAlbumImg > img').setAttribute('src', data.topalbums.album[0].image[2]['#text']);
         document.querySelector('#topAlbumName > p').innerHTML = topAlbums[0];
-        buildTopPlays(albumsChart, topAlbums, topPlays, username);
+        buildTopPlays(albumsChart, topAlbums.slice(0, 10), topPlays.slice(0, 10), username);
         _.forEach(top_albums, (album) => {
           lastfm.album.getTopTags({
             artist: album.artist.name,
@@ -114,7 +114,7 @@ function Pull() {
         this.global.topArtistsPlays = topArtistsPlays;
         document.querySelector('#topArtistImg > img').setAttribute('src', data.topartists.artist[0].image[2]['#text']);
         document.querySelector('#topArtistName > p').innerHTML = topArtists[0];
-        buildTopArtists(artistsChart, topArtists, topArtistsPlays, username);
+        buildTopArtists(artistsChart, topArtists.slice(0, 10), topArtistsPlays.slice(0, 10), username);
         const topArtistsTags = [];
         let topArtistsTagsCount = {};
         topArtists.forEach((artist) => {

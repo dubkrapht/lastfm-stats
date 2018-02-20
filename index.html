@@ -62,27 +62,30 @@
         <div class="canvas-container">
           <canvas id="albumsChart"></canvas>
         </div>
+        <a href="#" data-toggle="modal" data-target="#topAlbumsModal" data-target-source="50">More</a>
       </div>
       <div class="col-md-4 chartWrapper">
         <div class="canvas-container">
           <canvas id="tracksChart"></canvas>
         </div>
+        <a href="#" data-toggle="modal" data-target="#topTracksModal" data-target-source="50">More</a>
       </div>
       <div class="col-md-4 chartWrapper">
         <div class="canvas-container">
           <canvas id="artistsChart"></canvas>
         </div>
+        <a href="#" data-toggle="modal" data-target="#topArtistsModal" data-target-source="50">More</a>
       </div>
     </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-3 chartWrapper">
+    <div class="col-md-4 chartWrapper">
       <div class="canvas-container">
         <canvas id="tagsChart"></canvas>
       </div>
     </div>
-    <div class="col-md-3 chartWrapper">
+    <div class="col-md-4 chartWrapper">
       <div class="canvas-container">
         <canvas id="artistsTagsChart"></canvas>
       </div>
@@ -103,10 +106,6 @@
   <input type="text" id="limit">
   <button id="submit">Get Stats</button>
 </div>
-
-<a href="#" data-toggle="modal" data-target="#topArtistsModal" data-target-source="50">Example 1</a>
-<a href="#" data-toggle="modal" data-target="#topAlbumsModal" data-target-source="50">Example 2</a>
-<a href="#" data-toggle="modal" data-target="#topTracksModal" data-target-source="50">Example 3</a>
 <!-- modal -->
 <div class="modal fade" id="topArtistsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
