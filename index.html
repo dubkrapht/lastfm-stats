@@ -131,7 +131,7 @@
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
       </div>
-      <div class="topAlbumsModalBody">
+      <div class="topAlbumsModalBody" width="1200" height="600">
         <canvas id="canvas" width="1200" height="600"></canvas>
       </div>
     </div>
@@ -201,19 +201,19 @@
     });
     $('#topArtistsModal').on('shown.bs.modal', (e) => {
       var modal = $(this);
-      var ctx = document.querySelector('.topArtistsModalBody canvas').getContext('2d');
+      var ctx = document.querySelector('.topArtistsModalBody > canvas').getContext('2d');
       var chart = new Chart(ctx, options.topArtists(pull.global.topArtists, pull.global.topArtistsPlays, 'yoann303'));
     }).on('hidden.bs.modal',function(event) {
       // reset canvas size
       var modal = $(this);
       const canvas = modal.find('.modal-body canvas');
-      canvas.attr('width','568px').attr('height','300px');
+      canvas.attr('width','1200px').attr('height','600px');
       // destroy modal
       $(this).data('bs.modal', null);
     });
     $('#topAlbumsModal').on('shown.bs.modal', (e) => {
       var modal = $(this);
-      var ctx = document.querySelector('.topAlbumsModalBody canvas').getContext('2d');
+      var ctx = document.querySelector('.topAlbumsModalBody > canvas').getContext('2d');
       console.log(pull.global);
       const chart = new Chart(ctx, options.topPlays(pull.global.topAlbums, pull.global.topAlbumsPlays, 'yoann303'));
     }).on('hidden.bs.modal',function(event) {
@@ -226,7 +226,7 @@
     });
     $('#topTracksModal').on('shown.bs.modal', (e) => {
       var modal = $(this);
-      var ctx = document.querySelector('.topTracksModalBody canvas').getContext('2d');
+      var ctx = document.querySelector('.topTracksModalBody > canvas').getContext('2d');
       var chart = new Chart(ctx, options.topArtists(pull.global.topTracks, pull.global.topTracksPlays, 'yoann303'));
     }).on('hidden.bs.modal',function(event) {
       // reset canvas size
