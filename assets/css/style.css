@@ -3,3 +3,34 @@
 	margin-left: auto;
 	margin-rigth: auto;
 }
+
+.loading {
+    background: rgba(255, 255, 255, 1);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9998;
+}
+
+.spinner {
+    background: #000 url(https://code.jquery.com/mobile/1.1.0/images/ajax-loader.gif) 0 0 no-repeat;
+    border: 0;
+    -webkit-border-radius: 36px;
+    -moz-border-radius: 36px;
+    border-radius: 36px;
+    box-shadow: 0 1px 1px -1px #fff;
+    display: block;
+    height: 46px;
+    left: 50%;
+    margin:-23px 0 0 -23px;
+    opacity: .18;
+    overflow: hidden;
+    padding:1px;
+    position: fixed;
+    text-align:center;
+    top: 50%;
+    width: 46px;
+    z-index: 9999;
+}

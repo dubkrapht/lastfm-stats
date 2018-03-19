@@ -105,6 +105,9 @@
   <label for="limit">Stats Limit (Defaults to 50)</label>
   <input type="text" id="limit">
   <button id="submit">Get Stats</button>
+  <div class="loading" style="display: none;">
+    <div class="spinner"></div>
+  </div>
 </div>
 <!-- modal -->
 <div class="modal fade" id="topArtistsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -193,6 +196,7 @@
     // on click event
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
+      $('.loading').toggle();
       var username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
@@ -200,15 +204,17 @@
       pull.getTopTags(username, period, limit);
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
+      // $('.loading').toggle();
     });
     // handle modal event
     $('.modal').on('shown.bs.modal', e => {
       const modalId = e.target.getAttribute('id');
       const dataType = modalId.replace('Modal', '');
       const ctx = document.querySelector(`.${modalId}Body > canvas`).getContext('2d');
-      console.log(typeof options, options, dataType);
       const chart = new Chart(ctx, options[dataType](pull.global[dataType], pull.global[`${dataType}Plays`], username));
     });
+
+    $('')
 </script>
 </body>
 
