@@ -47,7 +47,7 @@ function Pull() {
         this.global.topAlbumsPlays = topPlays;
         document.querySelector('#topAlbumImg > img').setAttribute('src', data.topalbums.album[0].image[2]['#text']);
         document.querySelector('#topAlbumName > p').innerHTML = topAlbums[0];
-        buildTopPlays(albumsChart, topAlbums.slice(0, 10), topPlays.slice(0, 10), username);
+        buildTopAlbums(albumsChart, topAlbums.slice(0, 10), topPlays.slice(0, 10), username);
         _.forEach(top_albums, (album) => {
           lastfm.album.getTopTags({
             artist: album.artist.name,

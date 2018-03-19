@@ -126,7 +126,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
+        <h4 class="modal-title" id="exampleModalLabel">Top Albums</h4>
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
@@ -141,7 +141,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="exampleModalLabel">Top Artist</h4>
+        <h4 class="modal-title" id="exampleModalLabel">Top Tracks</h4>
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
@@ -176,8 +176,8 @@
     function buildTopTracks(chart, labels, data, username) {
       new Chart(chart, options.topTracks(labels, data, username));
     }
-    function buildTopPlays(chart, labels, data, username) {
-      new Chart(chart, options.topPlays(labels, data, username));
+    function buildTopAlbums(chart, labels, data, username) {
+      new Chart(chart, options.topAlbums(labels, data, username));
     }
     function buildGenres(chart, labels, data, username) {
       new Chart(chart, options.genres(labels, data, username));
@@ -191,7 +191,7 @@
 
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
-      const username = document.getElementById('username').value;
+      var username = document.getElementById('username').value;
       const period = document.getElementById('period').value;
       let limit = document.getElementById('limit').value || 50;
       pull = new Pull();
@@ -199,42 +199,12 @@
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
     });
-    $('#topArtistsModal').on('shown.bs.modal', (e) => {
-      var modal = $(this);
-      var ctx = document.querySelector('.topArtistsModalBody > canvas').getContext('2d');
-      var chart = new Chart(ctx, options.topArtists(pull.global.topArtists, pull.global.topArtistsPlays, 'yoann303'));
-    }).on('hidden.bs.modal',function(event) {
-      // reset canvas size
-      var modal = $(this);
-      const canvas = modal.find('.modal-body canvas');
-      canvas.attr('width','1200px').attr('height','600px');
-      // destroy modal
-      $(this).data('bs.modal', null);
-    });
-    $('#topAlbumsModal').on('shown.bs.modal', (e) => {
-      var modal = $(this);
-      var ctx = document.querySelector('.topAlbumsModalBody > canvas').getContext('2d');
-      console.log(pull.global);
-      const chart = new Chart(ctx, options.topPlays(pull.global.topAlbums, pull.global.topAlbumsPlays, 'yoann303'));
-    }).on('hidden.bs.modal',function(event) {
-      // reset canvas size
-      var modal = $(this);
-      var canvas = modal.find('.modal-body canvas');
-      canvas.attr('width','568px').attr('height','300px');
-      // destroy modal
-      $(this).data('bs.modal', null);
-    });
-    $('#topTracksModal').on('shown.bs.modal', (e) => {
-      var modal = $(this);
-      var ctx = document.querySelector('.topTracksModalBody > canvas').getContext('2d');
-      var chart = new Chart(ctx, options.topArtists(pull.global.topTracks, pull.global.topTracksPlays, 'yoann303'));
-    }).on('hidden.bs.modal',function(event) {
-      // reset canvas size
-      var modal = $(this);
-      const canvas = modal.find('.modal-body canvas');
-      canvas.attr('width','568px').attr('height','300px');
-      // destroy modal
-      $(this).data('bs.modal', null);
+    $('.modal').on('shown.bs.modal', e => {
+      const modalId = e.target.getAttribute('id');
+      const dataType = modalId.replace('Modal', '');
+      const ctx = document.querySelector(`.${modalId}Body > canvas`).getContext('2d');
+      console.log(typeof options, options, dataType);
+      const chart = new Chart(ctx, options[dataType](pull.global[dataType], pull.global[`${dataType}Plays`], username));
     });
 </script>
 </body>

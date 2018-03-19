@@ -59,7 +59,7 @@ function Option() {
       };
     }
 
-  this.topPlays = (labels, data, user) => {
+  this.topAlbums = (labels, data, user) => {
     return {
       type: 'horizontalBar',
       data: {
