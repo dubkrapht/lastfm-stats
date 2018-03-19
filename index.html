@@ -173,6 +173,7 @@
     });
 
     let options = new Option();
+    // functios for building charts
     function buildTopTracks(chart, labels, data, username) {
       new Chart(chart, options.topTracks(labels, data, username));
     }
@@ -188,7 +189,8 @@
     function buildTopArtistsGenres(chart, labels, data, username) {
       new Chart(chart, options.artistGenre(labels, data, username));
     }
-
+    
+    // on click event
     let submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', () => {
       var username = document.getElementById('username').value;
@@ -199,6 +201,7 @@
       pull.getTopTracks(username, period, limit);
       pull.getTopArtists(username, period, limit);
     });
+    // handle modal event
     $('.modal').on('shown.bs.modal', e => {
       const modalId = e.target.getAttribute('id');
       const dataType = modalId.replace('Modal', '');
